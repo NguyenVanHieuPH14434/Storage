@@ -11,12 +11,8 @@ import ModalCreateStorage from "./ModalCreateStorage";
 import ModalUpdateStorage from "./ModalUpdateStorage";
 
 function Storage() {
-<<<<<<< HEAD
-  const [show1, setShow1] = useState(false); 
-=======
   const [showModalCreateStorage, setShowModalCreateStorage] = useState(false);
   const [showModalUpdateStorage, setShowModalUpdateStorage] = useState(false);
->>>>>>> andev
 
   return (
     <div className="lot">

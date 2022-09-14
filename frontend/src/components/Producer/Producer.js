@@ -12,16 +12,6 @@ const Producer = () => {
   const [showModalCreateProducer, setShowModalCreateProducer] = useState(false);
   const [showModalUpdateProducer, setShowModalUpdateProducer] = useState(false);
 
-<<<<<<< HEAD
-  const handleClose1 = () => setShow1(false);
-  const handleShow1 = () => setShow1(true); 
-
-  const [show2, setShow2] = useState(false);
-
-  const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => setShow2(true);
-=======
->>>>>>> andev
   return (
     <div className="producer">
       <p className="title">Danh sách nhà cung cấp</p>
