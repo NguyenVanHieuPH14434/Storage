@@ -8,7 +8,7 @@
     align-items: center;
 
     .transaction {
-        margin-top: 0.1em; 
+        margin-top: 0.1em;
         margin-right: 2em;
         padding: 1.2em 1em;
         border-left: 0.125em solid white;
@@ -102,7 +102,7 @@
 }
 
 .field {
-    margin: 0 2%; 
+    margin: 0 2%;
 
     .title {
         margin: 0;
@@ -113,4 +113,8 @@
         width: 98%;
         border-radius: 0.3125em;
     }
+}
+
+.link {
+    display: block;
 }

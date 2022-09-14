@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/Dropdown";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";  
 
 import logo from "./images/logoPK.png";
 import transaction from "./images/icon-transaction.svg";
@@ -17,12 +14,13 @@ import user from "./images/user.svg";
 import { IoMdLock } from "react-icons/io";
 import { MdOutlineExitToApp } from "react-icons/md";
 import "./Header.scss";
+import ModalUpdatePassword from "./ModalUpdatePassword";
 
 const Header = () => {
-  const [show, setShow] = useState(false);
+  const [showModalUpdatePassword, setShowModalUpdatePassword] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShowModalUpdatePassword(false);
+  const handleShow = () => setShowModalUpdatePassword(true);
   return (
     <>
       <Navbar bg="success" expand="sm">
@@ -33,14 +31,14 @@ const Header = () => {
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto my-2 my-lg-0 menu">
               <Nav.Item className="transaction">
-                <Link to="/transaction" className="link">
+                <NavLink to="/transaction" className="link">
                   <img
                     src={transaction}
                     alt="transaction"
                     className="img1"
                   ></img>
                   <p className="para1">GIAO DỊCH</p>
-                </Link>
+                </NavLink>
               </Nav.Item>
               <Dropdown className="inventory">
                 <Dropdown.Toggle variant="success" className="container1">
@@ -49,29 +47,29 @@ const Header = () => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item>
-                    <Link to="/producer" className="link">
+                    <NavLink to="/producer" className="link">
                       Nhà Cung Cấp
-                    </Link>
+                    </NavLink>
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Link to="/consignment" className="link">
+                    <NavLink to="/consignment" className="link">
                       Nhập Lô
-                    </Link>
+                    </NavLink>
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Link to="/storage" className="link">
+                    <NavLink to="/storage" className="link">
                       Lưu kho
-                    </Link>
+                    </NavLink>
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Link to="/pharmacy" className="link">
+                    <NavLink to="/pharmacy" className="link">
                       Thuốc
-                    </Link>
+                    </NavLink>
                   </Dropdown.Item>
                   <Dropdown.Item>
-                    <Link to="/management" className="link">
+                    <NavLink to="/management" className="link">
                       Quản Lý Kệ thuốc
-                    </Link>
+                    </NavLink>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -92,41 +90,16 @@ const Header = () => {
                   <p className="name">Thoát</p>
                 </Dropdown.Item>
               </Dropdown.Menu>
+              {
+                <ModalUpdatePassword
+                  show={showModalUpdatePassword}
+                  setShow={setShowModalUpdatePassword}
+                />
+              }
             </Dropdown>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title className="total">Cập nhật mật khẩu</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Họ Tên</Form.Label>
-              <Form.Control type="text" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Tên Tài Khoản</Form.Label>
-              <Form.Control type="text" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Mật Khẩu Mới</Form.Label>
-              <Form.Control type="text" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Xác Nhận Lại Mật Khẩu Mới</Form.Label>
-              <Form.Control type="text" />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success">CẬP NHẬT</Button>
-          <Button variant="danger" onClick={handleClose}>
-            HỦY
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };
