@@ -9,7 +9,7 @@ import { Row, Col } from "react-bootstrap";
 import "./Storage.scss";
 
 function Storage() {
-  const [show1, setShow1] = useState(false);
+  const [show1, setShow1] = useState(false); 
 
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);

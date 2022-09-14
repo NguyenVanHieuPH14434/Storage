@@ -7,7 +7,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
+import Form from "react-bootstrap/Form";  
 
 import logo from "./images/logoPK.png";
 import transaction from "./images/icon-transaction.svg";
