@@ -5,11 +5,35 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
+import axios from "axios";
 
 const ModalUpdateConsignment = (props) => {
-  const { show, setShow } = props;
+  const { show, setShow, listProducer, fetchListConsignments, dataUpdate } =
+    props;
+  const [formConsignment, setFormConsignment] = useState({
+    product_name: "",
+    producer_name: "",
+    lot_number: "",
+  });
+  const { product_name, producer_name, lot_number } = formConsignment;
   const handleClose = () => {
     setShow(false);
+  };
+
+  const onChangeForm = (event) => {
+    setFormConsignment({
+      ...formConsignment,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleSubmitForm = async (_id) => {
+    let data = await axios.post(
+      `http://localhost:4000/api/consignment/update/${_id}`,
+      formConsignment
+    );
+    handleClose();
+    await fetchListConsignments();
   };
   return (
     <>
@@ -24,14 +48,20 @@ const ModalUpdateConsignment = (props) => {
                 <Form.Label>Tên Hàng Hóa</Form.Label>
                 <Form.Control
                   type="text"
+                  name="product_name"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  value={product_name ? product_name : dataUpdate.product_name}
+                  onChange={onChangeForm}
                 />
               </Row>
               <Row>
                 <Form.Label>Số Lô</Form.Label>
                 <Form.Control
                   type="text"
+                  name="lot_number"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  value={lot_number ? lot_number : dataUpdate.lot_number}
+                  onChange={onChangeForm}
                 />
               </Row>
             </Col>
@@ -41,23 +71,24 @@ const ModalUpdateConsignment = (props) => {
                 <Form.Select
                   aria-label="Default select example"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  value={producer_name}
+                  name="producer_name"
+                  onChange={onChangeForm}
                 >
-                  <option>Chọn nhà Cung Cấp</option>
-                  <option value="1">CTTP dược phẩn trung ương 2</option>
+                  <option> --- Chọn nhà Cung Cấp ---</option>
+                  {listProducer.map((item) => {
+    
+                    return <option >{item.producer_name}</option>;
+                  })}
                 </Form.Select>
-              </Row>
-              <Row>
-                <Form.Label>Ngày Nhập Kho</Form.Label>
-                <Form.Control
-                  type="date"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
               </Row>
             </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success">CẬP NHẬT</Button>
+          <Button variant="success" onClick={{ handleSubmitForm }}>
+            CẬP NHẬT
+          </Button>
           <Button variant="danger" onClick={handleClose}>
             HỦY
           </Button>

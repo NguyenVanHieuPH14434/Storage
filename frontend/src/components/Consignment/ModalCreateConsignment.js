@@ -1,16 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
+import axios from "axios";
 
 const ModalCreateConsignment = (props) => {
-  const { show, setShow } = props;
+  const { show, setShow, listProducer, fetchListConsignments } = props;
   const handleClose = () => {
     setShow(false);
+    setFormConsignment({ product_name: "", producer_name: "", lot_number: "" });
   };
+  const [formConsignment, setFormConsignment] = useState({
+    product_name: "",
+    producer_name: "",
+    lot_number: "",
+  });
+  const { product_name, producer_name, lot_number } = formConsignment;
+
+  const onChangeForm = (event) => {
+    setFormConsignment({
+      ...formConsignment,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleSubmitForm = async () => {
+    let data = await axios.post(
+      "http://localhost:4000/api/consignment/create",
+      formConsignment
+    );
+    handleClose();
+    await fetchListConsignments();
+  };
+
   return (
     <>
       <Modal size="lg" show={show} onHide={handleClose} backdrop="static">
@@ -24,14 +49,20 @@ const ModalCreateConsignment = (props) => {
                 <Form.Label>Tên Hàng Hóa</Form.Label>
                 <Form.Control
                   type="text"
+                  name="product_name"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  value={product_name}
+                  onChange={onChangeForm}
                 />
               </Row>
               <Row>
                 <Form.Label>Số Lô</Form.Label>
                 <Form.Control
                   type="text"
+                  name="lot_number"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  value={lot_number}
+                  onChange={onChangeForm}
                 />
               </Row>
             </Col>
@@ -41,23 +72,24 @@ const ModalCreateConsignment = (props) => {
                 <Form.Select
                   aria-label="Default select example"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  value={producer_name}
+                  name="producer_name"
+                  onChange={onChangeForm}
                 >
-                  <option>Chọn nhà Cung Cấp</option>
-                  <option value="1">CTTP dược phẩn trung ương 2</option>
+                  <option> --- Chọn nhà Cung Cấp ---</option>
+                  {listProducer.map((item) => {
+                    return <option>{item.producer_name}</option>;
+                  })}
                 </Form.Select>
               </Row>
-              <Row>
-                <Form.Label>Ngày Nhập Kho</Form.Label>
-                <Form.Control
-                  type="date"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
+              <Row></Row>
             </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success">THÊM MỚI</Button>
+          <Button variant="success" onClick={handleSubmitForm}>
+            THÊM MỚI
+          </Button>
           <Button variant="danger" onClick={handleClose}>
             QUAY LẠI
           </Button>
