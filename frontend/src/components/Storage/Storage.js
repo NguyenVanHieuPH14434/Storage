@@ -7,17 +7,17 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Storage.scss";
+import ModalCreateStorage from "./ModalCreateStorage";
+import ModalUpdateStorage from "./ModalUpdateStorage";
 
 function Storage() {
+<<<<<<< HEAD
   const [show1, setShow1] = useState(false); 
+=======
+  const [showModalCreateStorage, setShowModalCreateStorage] = useState(false);
+  const [showModalUpdateStorage, setShowModalUpdateStorage] = useState(false);
+>>>>>>> andev
 
-  const handleClose1 = () => setShow1(false);
-  const handleShow1 = () => setShow1(true);
-
-  const [show2, setShow2] = useState(false);
-
-  const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => setShow2(true);
   return (
     <div className="lot">
       <Tabs defaultActiveKey="first">
@@ -33,7 +33,10 @@ function Storage() {
                 placeholder="Nhập tên lô"
                 className="fip"
               />
-              <Button variant="success" onClick={handleShow1}>
+              <Button
+                variant="success"
+                onClick={() => setShowModalCreateStorage(true)}
+              >
                 THÊM MỚI
               </Button>
             </Form.Group>
@@ -70,7 +73,7 @@ function Storage() {
                   <Button
                     variant="primary"
                     className="btn"
-                    onClick={handleShow2}
+                    onClick={() => setShowModalUpdateStorage(true)}
                   >
                     Sửa
                   </Button>
@@ -79,169 +82,23 @@ function Storage() {
               </tr>
             </tbody>
           </Table>
-          <Modal size="lg" show={show1} onHide={handleClose1}>
-            <Modal.Header closeButton>
-              <Modal.Title className="total">Thêm Mới Lô</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row>
-                <Col>
-                  <Row>
-                    <Form.Label>Tên Kệ</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Tên Lô</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Sản Phẩm</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Phân Loại</Form.Label>
-                    <Form.Select
-                      aria-label="Default select example"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    >
-                      <option>Chọn Phân Loại</option>
-                      <option value="1">Thuốc</option>
-                      <option value="2">Vật Tư</option>
-                    </Form.Select>
-                  </Row>
-                </Col>
-                <Col>
-                  <Row>
-                    <Form.Label>Số Lượng</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Ngày Nhập</Form.Label>
-                    <Form.Control
-                      type="date"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Ngày Sản Xuất</Form.Label>
-                    <Form.Control
-                      type="date"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Ngày Hết Hạn</Form.Label>
-                    <Form.Control
-                      type="date"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                </Col>
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="success">THÊM MỚI</Button>
-              <Button variant="danger" onClick={handleClose1}>
-                QUAY LẠI
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          <Modal size="lg" show={show2} onHide={handleClose2}>
-            <Modal.Header closeButton>
-              <Modal.Title className="total">Sửa Thông Tin Lô</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row>
-                <Col>
-                  <Row>
-                    <Form.Label>Tên Kệ</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Tên Lô</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Sản Phẩm</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Phân Loại</Form.Label>
-                    <Form.Select
-                      aria-label="Default select example"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    >
-                      <option>Chọn Phân Loại</option>
-                      <option value="1">Thuốc</option>
-                      <option value="2">Vật Tư</option>
-                    </Form.Select>
-                  </Row>
-                </Col>
-                <Col>
-                  <Row>
-                    <Form.Label>Số Lượng</Form.Label>
-                    <Form.Control
-                      type="text"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Ngày Nhập</Form.Label>
-                    <Form.Control
-                      type="date"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Ngày Sản Xuất</Form.Label>
-                    <Form.Control
-                      type="date"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                  <Row>
-                    <Form.Label>Ngày Hết Hạn</Form.Label>
-                    <Form.Control
-                      type="date"
-                      style={{ width: "90%", marginLeft: "3%" }}
-                    />
-                  </Row>
-                </Col>
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="success">CẬP NHẬT</Button>
-              <Button variant="danger" onClick={handleClose2}>
-                HỦY
-              </Button>
-            </Modal.Footer>
-          </Modal>
         </Tab>
         <Tab eventKey="second" title="Vật Tự">
           Vật Tư
         </Tab>
       </Tabs>
+      {
+        <ModalCreateStorage
+          show={showModalCreateStorage}
+          setShow={setShowModalCreateStorage}
+        />
+      }
+      {
+        <ModalUpdateStorage
+          show={showModalUpdateStorage}
+          setShow={setShowModalUpdateStorage}
+        />
+      }
     </div>
   );
 }

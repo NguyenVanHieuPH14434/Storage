@@ -5,10 +5,14 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Producer.scss";
+import ModalCreateProducer from "./ModalCreateProducer";
+import ModalUpdateProducer from "./ModalUpdateProducer";
 
 const Producer = () => {
-  const [show1, setShow1] = useState(false);
+  const [showModalCreateProducer, setShowModalCreateProducer] = useState(false);
+  const [showModalUpdateProducer, setShowModalUpdateProducer] = useState(false);
 
+<<<<<<< HEAD
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true); 
 
@@ -16,6 +20,8 @@ const Producer = () => {
 
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
+=======
+>>>>>>> andev
   return (
     <div className="producer">
       <p className="title">Danh sách nhà cung cấp</p>
@@ -30,7 +36,10 @@ const Producer = () => {
             placeholder="Nhập tên nhà cung cấp"
             className="fip"
           />
-          <Button variant="success" onClick={handleShow1}>
+          <Button
+            variant="success"
+            onClick={() => setShowModalCreateProducer(true)}
+          >
             THÊM MỚI
           </Button>
         </Form.Group>
@@ -56,7 +65,13 @@ const Producer = () => {
             <td>0984563147</td>
             <td>nguyenngocducdandon@gmail.com</td>
             <td>
-              <Button variant="primary" className="btn" onClick={handleShow2}>
+              <Button
+                variant="primary"
+                className="btn"
+                onClick={() => {
+                  setShowModalUpdateProducer(true);
+                }}
+              >
                 Sửa
               </Button>
               <Button variant="danger">Xóa</Button>
@@ -64,102 +79,18 @@ const Producer = () => {
           </tr>
         </tbody>
       </Table>
-      <Modal size="lg" show={show1} onHide={handleClose1}>
-        <Modal.Header closeButton>
-          <Modal.Title className="total">Thêm Mới Nhà Cung Cấp</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row>
-            <Col>
-              <Row>
-                <Form.Label>Tên Nhà Cung Cấp</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-              <Row>
-                <Form.Label>Địa Chỉ</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-            </Col>
-            <Col>
-              <Row>
-                <Form.Label>Số Điện Thoại</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-              <Row>
-                <Form.Label>Tên Nhà Cung Cấp</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-            </Col>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success">THÊM MỚI</Button>
-          <Button variant="danger" onClick={handleClose1}>
-            QUAY LẠI
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal size="lg" show={show2} onHide={handleClose2}>
-        <Modal.Header closeButton>
-          <Modal.Title className="total">
-            Sửa Thông Tin Nhà Cung Cấp
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row>
-            <Col>
-              <Row>
-                <Form.Label>Tên Nhà Cung Cấp</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-              <Row>
-                <Form.Label>Địa Chỉ</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-            </Col>
-            <Col>
-              <Row>
-                <Form.Label>Số Điện Thoại</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-              <Row>
-                <Form.Label>Tên Nhà Cung Cấp</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-            </Col>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success">CẬP NHẬT</Button>
-          <Button variant="danger" onClick={handleClose2}>
-            HỦY
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {
+        <ModalCreateProducer
+          show={showModalCreateProducer}
+          setShow={setShowModalCreateProducer}
+        />
+      }
+      {
+        <ModalUpdateProducer
+          show={showModalUpdateProducer}
+          setShow={setShowModalUpdateProducer}
+        />
+      }
     </div>
   );
 };
