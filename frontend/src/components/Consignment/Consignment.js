@@ -55,9 +55,9 @@ const Consignment = () => {
 
   const fetchListConsignments = async () => {
     let response = await getAllConsigment();
-    // console.log(response);
+    console.log(response);
     if (response) {
-      setListConsignments(response.data);
+      setListConsignments(response.data.docs);
     }
   };
   const getAllProducer = () => {
@@ -68,7 +68,7 @@ const Consignment = () => {
     let response = await getAllProducer();
     // console.log(response);
     if (response) {
-      setListProducer(response.data);
+      setListProducer(response.data.docs);
     }
   };
   const getConsigment = (_id) => {
