@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import { getAllConsigment } from "../../services/apiServices";
 import ModalCreateConsignment from "./ModalCreateConsignment";
 import ModalUpdateConsignment from "./ModalUpdateConsignment";
@@ -36,7 +38,6 @@ const Consignment = () => {
     // await fetchListConsignments();
     // console.log("update consignment: ", consignment);
   };
-
 
   const handleShowDeleteConsignment = (item) => {
     setShowModalDeleteConsignment(true);
@@ -189,6 +190,17 @@ const Consignment = () => {
           fetchListConsignments={fetchListConsignments}
         />
       }
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

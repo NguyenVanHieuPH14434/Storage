@@ -6,6 +6,7 @@ import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ModalCreateConsignment = (props) => {
   const { show, setShow, listProducer, fetchListConsignments } = props;
@@ -28,11 +29,27 @@ const ModalCreateConsignment = (props) => {
   };
 
   const handleSubmitForm = async () => {
+    // validate
+    if (!product_name) {
+      toast.error("Bạn chưa nhập trường hàng hóa");
+      return;
+    }
+    if (!lot_number) {
+      toast.error("Bạn chưa nhập trường số lô");
+      return;
+    }
+    if (!producer_name) {
+      toast.error("Bạn chưa nhập trường nhà cung cấp");
+      return;
+    }
+
+    // add data
     let data = await axios.post(
       "http://localhost:4000/api/consignment/create",
       formConsignment
     );
     handleClose();
+    toast.success("Bạn đã nhập hàng vào kho thành công");
     await fetchListConsignments();
   };
 

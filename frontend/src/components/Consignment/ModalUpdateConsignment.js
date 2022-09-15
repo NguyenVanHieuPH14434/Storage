@@ -7,6 +7,7 @@ import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
 import axios from "axios";
 import _ from "lodash";
+import { toast } from "react-toastify";
 
 const ModalUpdateConsignment = (props) => {
   const { show, setShow, listProducer, fetchListConsignments, dataUpdate } =
@@ -35,6 +36,21 @@ const ModalUpdateConsignment = (props) => {
   };
 
   const handleSubmitForm = async () => {
+    // validate
+    if (!product_name) {
+      toast.error("Bạn chưa nhập trường hàng hóa");
+      return;
+    }
+    if (!lot_number) {
+      toast.error("Bạn chưa nhập trường số lô");
+      return;
+    }
+    if (!producer_name) {
+      toast.error("Bạn chưa nhập trường nhà cung cấp");
+      return;
+    }
+
+    // update data
     // console.log(".....", formConsignment);
     let data = await axios.post(
       `http://localhost:4000/api/consignment/update/${formConsignment._id}`,
@@ -42,6 +58,7 @@ const ModalUpdateConsignment = (props) => {
     );
 
     handleClose();
+    toast.success("Bạn đã sửa thành công");
     await fetchListConsignments();
   };
 
