@@ -8,8 +8,17 @@ const getAllProducer = () => {
   return axios.get("http://localhost:4000/api/producer/list");
 };
 
-const deleteConsignment = (_id) => {
-  return axios.delete(`http://localhost:4000/api/consignment/delete/${_id}`);
+const updateConsignment = (id, data) => {
+  return axios.post(`http://localhost:4000/api/consignment/update/${id}`, data);
 };
 
-export { getAllConsigment, getAllProducer, deleteConsignment };
+const deleteConsignment = (id) => {
+  return axios.delete(`http://localhost:4000/api/consignment/delete/${id}`);
+};
+
+export {
+  getAllConsigment,
+  getAllProducer,
+  deleteConsignment,
+  updateConsignment,
+};

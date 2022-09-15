@@ -7,6 +7,7 @@ import "./Consignment.scss";
 import axios from "axios";
 import _ from "lodash";
 import { toast } from "react-toastify";
+import { updateConsignment } from "../../services/apiServices";
 
 const ModalUpdateConsignment = (props) => {
   const { show, setShow, listProducer, fetchListConsignments, dataUpdate } =
@@ -49,11 +50,8 @@ const ModalUpdateConsignment = (props) => {
       return;
     }
 
-    let data = await axios.post(
-      `http://localhost:4000/api/consignment/update/${formConsignment._id}`,
-      formConsignment
-    );
-
+    // update data
+    await updateConsignment(formConsignment._id, formConsignment);
     handleClose();
     toast.success("Bạn đã sửa thành công");
     await fetchListConsignments();
