@@ -15,7 +15,13 @@ function Storage() {
   const [checked, setChecked] = useState(false);
   const [show, setShow] = useState(false);
   const[medicine,setMedicine]=useState([])
+  const[medicineMain,setMedicineMain]=useState([medicine])
   const[supplies,setSupplies]=useState([])
+  const[tabIndex,setTabIndex]=useState('')
+  const [search,setSearch]=useState('')
+  useEffect(()=>{
+    setMedicineMain(medicine.filter((el)=>el.product_name.includes(search)))
+  },[search,medicine])
   const[data,setData]=useState({
     shelf_number:"",
     lot_number:"",
@@ -33,62 +39,81 @@ function Storage() {
   };
   let getKey = useRef()
   const checkValidate=(n)=>{
-    if(n.shelf_number !=="" && n.lot_number!=="" && n.product_name && n.type!=="" && n.quantity!=="" && n.nsx!=="" && n.hsd!==""){
-      axios.post('http://localhost:4000/api/storage/create',n)
-      .then(()=>{
-        console.log('success!');
-      })
-      .catch(()=>{
-        console.log('error');
-      })
+    if(tabIndex==='1'){
+      if(n.shelf_number !=="" && n.lot_number!=="" && n.product_name && n.type!=="" && n.quantity!=="" && n.nsx!=="" && n.hsd!==""){
+        axios.post('http://localhost:4000/api/storage/create',n)
+        .then(()=>{
+          setMedicineMain(medicine)
+          setShowModalCreateStorage(false)
+          setData({})
+          console.log('success!');
+        })
+        .catch(()=>{
+          console.log('error');
+        })
+      }
+      else{
+        setShowModalCreateStorage(true)
+        alert("Vui lòng nhập đầy đủ Thông Tin")
+      }
     }
-    else{
-      alert("Vui lòng nhập đầy đủ Thông Tin")
+    //update
+    if(tabIndex==='2'){
+      if(n.shelf_number !=="" && n.lot_number!=="" && n.product_name && n.type!=="" && n.quantity!=="" && n.nsx!=="" && n.hsd!==""){
+        axios.post(`http://localhost:4000/api/storage/update/${data._id}`,data)
+        .then(()=>{
+          setChecked(false)
+          setShowModalCreateStorage(false)
+          setData({})
+          console.log('success!')
+        })
+        .catch(()=>{
+          console.log('error');
+        })
+      }
+      else{
+        setShowModalCreateStorage(true)
+        alert("Vui lòng nhập đầy đủ Thông Tin")
+      }
     }
   }
   const handleData=(i)=>{
     setData(i)
+    setTabIndex('2')
     setChecked(true)
-    setShowModalCreateStorage(!showModalCreateStorage)
+    setShowModalCreateStorage(true)
   }
   const handleDelete=(i)=>{
     getKey.current = i;
     setShow(true)
   }
   const handleShowCreate=()=>{
-    setShowModalCreateStorage(!showModalCreateStorage)
+    setShowModalCreateStorage(true)
+    setTabIndex('1')
   }
   const handleCreate = () => {
     checkValidate(data)
-    // setShowModalCreateStorage(false);
+    setTabIndex('1')
   };
   console.log('warn');
   const handleUpdate=()=>{
-    axios.post(`http://localhost:4000/api/storage/update/${data._id}`,data)
-    .then(()=>{
-      setData({})
-      setChecked(false)
-      console.log('success!')
-    })
-    .catch(()=>{
-      console.log('error');
-    })
-    setShowModalCreateStorage(false);
+    checkValidate(data)
+    setTabIndex('2')
   }
   useEffect(()=>{
       Axios.get('http://localhost:4000/api/storage/list')
-      .then((res,req)=> setMedicine(res.data))
+      .then((res,req)=> setMedicine(res.data.docs))
       .catch(()=>{
         console.log('error');
       })
-  },[])
-  useEffect(()=>{
-    Axios.get('http://localhost:4000/api/storage/list')
-      .then((res,req)=> setSupplies(res.data))
-      .catch(()=>{
-        console.log('error');
-      })
-  },[])
+  },[showModalCreateStorage,show])
+  // useEffect(()=>{
+  //   Axios.get('http://localhost:4000/api/storage/list')
+  //     .then((res,req)=> setSupplies(res.data))
+  //     .catch(()=>{
+  //       console.log('error');
+  //     })
+  // },[])
   return (
     <div className="lot">
       <Tabs defaultActiveKey="first">
@@ -103,6 +128,7 @@ function Storage() {
                 type="text"
                 placeholder="Nhập tên lô"
                 className="fip"
+                onChange={(e)=>setSearch(e.target.value)}
               />
               <Button
                 variant="success"
@@ -129,32 +155,54 @@ function Storage() {
               </tr>
             </thead>
             <tbody>
-            {medicine.map((el,i)=>{
+            {medicineMain ? medicineMain.map((el,i)=>{
               return (
                 <tr key={i}>
-                <td>{i+1}</td>
-                <td>{el.lot_number}</td>
-                <td>{el.product_name}</td>
-                <td>{el.shelf_number}</td>
-                <td>{el.type}</td>
-                <td>{el.quantity}</td>
+                  <td>{i+1}</td>
+                  <td>{el.lot_number}</td>
+                  <td>{el.product_name}</td>
+                  <td>{el.shelf_number}</td>
+                  <td>{el.type}</td>
+                  <td>{el.quantity}</td>
+                  <td></td>
+                  <td>{el.nsx}</td>
+                  <td>{el.hsd}</td>
+                  <td>{el.ctime}</td>
+                  <td>
+                    <Button
+                      variant="primary"
+                      className="btn"
+                      onClick={() => handleData(el) }
+                    >
+                      Sửa
+                    </Button>
+                    <Button variant="danger" onClick={()=>handleDelete(el._id)} >Xóa</Button>
+                  </td>
+                </tr>
+                )
+              }):<tr>
                 <td></td>
-                <td>{el.nsx}</td>
-                <td>{el.hsd}</td>
-                <td>{el.ctime}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>
                   <Button
                     variant="primary"
                     className="btn"
-                    onClick={() => handleData(el) }
+                    onClick={() => handleData() }
                   >
                     Sửa
                   </Button>
-                  <Button variant="danger" onClick={()=>handleDelete(el._id)} >Xóa</Button>
+                  <Button variant="danger" onClick={()=>handleDelete()} >Xóa</Button>
                 </td>
               </tr>
-              )
-            })}
+            }
               
             </tbody>
           </Table>
