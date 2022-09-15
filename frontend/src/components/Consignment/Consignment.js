@@ -8,7 +8,12 @@ import "react-toastify/dist/ReactToastify.css";
 import ModalCreateConsignment from "./ModalCreateConsignment";
 import ModalUpdateConsignment from "./ModalUpdateConsignment";
 import ModalDeleteConsignment from "./ModalDeleteConsignment";
-import { getAllConsigment, getAllProducer } from "../../services/apiServices";
+import {
+  getAllConsigment,
+  getAllProducer,
+  getConsignmentWithPaginate,
+} from "../../services/apiServices";
+import ReactPaginate from "react-paginate";
 
 const Consignment = () => {
   const [listConsignments, setListConsignments] = useState([]);
@@ -24,6 +29,9 @@ const Consignment = () => {
   const [showModalDeleteConsignment, setShowModalDeleteConsignment] =
     useState(false);
   const [dataDelete, setDataDelete] = useState({});
+
+  const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleShowCreateConsignment = () => {
     setShowModalCreateConsignment(true);
@@ -46,6 +54,15 @@ const Consignment = () => {
     }
   };
 
+  const fetchListConsignmentsWithPaginate = async (page) => {
+    let response = await getConsignmentWithPaginate(page);
+    if (response) {
+      console.log(response.data);
+      setListConsignments(response.data.docs);
+      setPageCount(response.data.totalPage);
+    }
+  };
+
   const fetchListProducer = async () => {
     let response = await getAllProducer();
     if (response) {
@@ -54,9 +71,16 @@ const Consignment = () => {
   };
 
   useEffect(() => {
-    fetchListConsignments();
+    // fetchListConsignments();
+    fetchListConsignmentsWithPaginate(1);
     fetchListProducer();
   }, []);
+
+  const handlePageClick = (event) => {
+    fetchListConsignmentsWithPaginate(+event.selected + 1);
+    setCurrentPage(+event.selected + 1);
+    console.log(`User requested page number ${event.selected}`);
+  };
 
   return (
     <div className="consignment">
@@ -128,12 +152,39 @@ const Consignment = () => {
           )}
         </tbody>
       </Table>
+      <div className="d-flex justify-content-center">
+        <ReactPaginate
+          nextLabel="Tiếp >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={2}
+          pageCount={pageCount}
+          previousLabel="< Trước"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+          renderOnZeroPageCount={null}
+          forcePage={currentPage - 1}
+        />
+      </div>
+
       {
         <ModalCreateConsignment
           show={showModalCreateConsignment}
           setShow={setShowModalCreateConsignment}
           listProducer={listProducer}
           fetchListConsignments={fetchListConsignments}
+          fetchListConsignmentsWithPaginate={fetchListConsignmentsWithPaginate}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       }
       {
@@ -143,6 +194,9 @@ const Consignment = () => {
           dataUpdate={dataUpdate}
           listProducer={listProducer}
           fetchListConsignments={fetchListConsignments}
+          fetchListConsignmentsWithPaginate={fetchListConsignmentsWithPaginate}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       }
       {
@@ -152,6 +206,9 @@ const Consignment = () => {
           dataDelete={dataDelete}
           listProducer={listProducer}
           fetchListConsignments={fetchListConsignments}
+          fetchListConsignmentsWithPaginate={fetchListConsignmentsWithPaginate}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       }
       <ToastContainer

@@ -16,9 +16,14 @@ const deleteConsignment = (id) => {
   return axios.delete(`http://localhost:4000/api/consignment/delete/${id}`);
 };
 
+const getConsignmentWithPaginate = (page) => {
+  return axios.get(`http://localhost:4000/api/consignment/list?page=${page}`);
+};
+
 export {
   getAllConsigment,
   getAllProducer,
   deleteConsignment,
   updateConsignment,
+  getConsignmentWithPaginate,
 };

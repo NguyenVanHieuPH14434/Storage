@@ -4,14 +4,20 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
-import axios from "axios";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import { updateConsignment } from "../../services/apiServices";
 
 const ModalUpdateConsignment = (props) => {
-  const { show, setShow, listProducer, fetchListConsignments, dataUpdate } =
-    props;
+  const {
+    show,
+    setShow,
+    listProducer,
+    fetchListConsignmentsWithPaginate,
+    dataUpdate,
+    setCurrentPage,
+    currentPage,
+  } = props;
   const [formConsignment, setFormConsignment] = useState({
     product_name: "",
     producer_name: "",
@@ -54,7 +60,8 @@ const ModalUpdateConsignment = (props) => {
     await updateConsignment(formConsignment._id, formConsignment);
     handleClose();
     toast.success("Bạn đã sửa thành công");
-    await fetchListConsignments();
+    setCurrentPage(currentPage);
+    await fetchListConsignmentsWithPaginate(currentPage);
   };
 
   // console.log("check update", dataUpdate);

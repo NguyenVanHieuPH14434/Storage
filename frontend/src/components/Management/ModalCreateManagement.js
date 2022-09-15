@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
 import "./Management.scss";
 
 const ModalCreateManagement = (props) => {

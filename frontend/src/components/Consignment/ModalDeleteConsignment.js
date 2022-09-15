@@ -5,7 +5,15 @@ import axios from "axios";
 import { deleteConsignment } from "../../services/apiServices";
 import { toast } from "react-toastify";
 const ModalDeleteConsignment = (props) => {
-  const { show, setShow, dataDelete, fetchListConsignments } = props;
+  const {
+    show,
+    setShow,
+    dataDelete,
+    fetchListConsignments,
+    fetchListConsignmentsWithPaginate,
+    setCurrentPage,
+    currentPage,
+  } = props;
   const handleClose = () => {
     setShow(false);
   };
@@ -14,7 +22,8 @@ const ModalDeleteConsignment = (props) => {
     let data = await deleteConsignment(dataDelete._id);
     handleClose();
     toast.success("Bạn đã xóa thành công");
-    await fetchListConsignments();
+    setCurrentPage(currentPage);
+    await fetchListConsignmentsWithPaginate(currentPage);
   };
   return (
     <>

@@ -8,7 +8,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const ModalCreateConsignment = (props) => {
-  const { show, setShow, listProducer, fetchListConsignments } = props;
+  const {
+    show,
+    setShow,
+    listProducer,
+    fetchListConsignmentsWithPaginate,
+    setCurrentPage,
+  } = props;
 
   const [formConsignment, setFormConsignment] = useState({
     product_name: "",
@@ -51,7 +57,8 @@ const ModalCreateConsignment = (props) => {
     );
     handleClose();
     toast.success("Bạn đã nhập hàng vào kho thành công");
-    await fetchListConsignments();
+    setCurrentPage(1);
+    await fetchListConsignmentsWithPaginate(1);
   };
 
   return (
