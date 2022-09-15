@@ -8,13 +8,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import ModalCreateConsignment from './ModalCreateConsignment';
 import ModalUpdateConsignment from './ModalUpdateConsignment';
 import ModalDeleteConsignment from './ModalDeleteConsignment';
-import { getAllConsigment, getAllProducer, getConsignmentWithPaginate } from '../../services/apiServices';
+import {
+    getAllConsigment,
+    getAllProducer,
+    getConsignmentWithPaginate,
+    searchConsigment,
+} from '../../services/apiServices';
 import ReactPaginate from 'react-paginate';
 
 const Consignment = () => {
     const [listConsignments, setListConsignments] = useState([]);
     const [listProducer, setListProducer] = useState([]);
-  
 
     const [showModalCreateConsignment, setShowModalCreateConsignment] = useState(false);
 
@@ -26,6 +30,8 @@ const Consignment = () => {
 
     const [pageCount, setPageCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const [search, setSearch] = useState('');
 
     const handleShowCreateConsignment = () => {
         setShowModalCreateConsignment(true);
@@ -65,10 +71,12 @@ const Consignment = () => {
     };
 
     useEffect(() => {
-        // fetchListConsignments();
-        fetchListConsignmentsWithPaginate(1);
-        fetchListProducer();
-    }, []);
+        if (search === '') {
+            fetchListConsignmentsWithPaginate(1);
+            fetchListProducer();
+        }
+        setListConsignments(listConsignments.filter((el) => el.product_name.includes(search)));
+    }, [search]);
 
     const handlePageClick = (event) => {
         fetchListConsignmentsWithPaginate(+event.selected + 1);
@@ -82,7 +90,13 @@ const Consignment = () => {
             <Form>
                 <Form.Group className="mb-3 fcontainer" controlId="exampleForm.ControlInput1">
                     <Form.Label className="ftext">Tìm Kiếm Hàng Hóa</Form.Label>
-                    <Form.Control type="text" placeholder="Nhâp tên hàng hóa" className="fip" />
+                    <Form.Control
+                        type="text"
+                        name="search"
+                        onChange={(ev) => setSearch(ev.target.value)}
+                        placeholder="Nhâp tên hàng hóa"
+                        className="fip"
+                    />
                     <Button variant="success" onClick={handleShowCreateConsignment}>
                         THÊM MỚI
                     </Button>
