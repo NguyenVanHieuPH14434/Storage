@@ -15,6 +15,7 @@ import {
 } from "../../services/apiServices";
 import ReactPaginate from "react-paginate";
 
+const hello = () => {};
 const Consignment = () => {
   const [listConsignments, setListConsignments] = useState([]);
   const [listProducer, setListProducer] = useState([]);
