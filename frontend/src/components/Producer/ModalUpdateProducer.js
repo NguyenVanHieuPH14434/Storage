@@ -4,57 +4,34 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { Row, Col } from "react-bootstrap";
 import "./Producer.scss";
+import Axios from "axios";
 const ModalUpdateProducer = (props) => {
-  const { show, setShow } = props;
+  const { show, setShow, handelcheck,setHandleCheck, index } = props;
   const handleClose = () => {
     setShow(false);
   };
+
+  const handleDelete = (index) => {
+     Axios.delete(`http://localhost:4000/api/producer/delete/${index}`)
+          .then(() => {
+              setShow(!show)
+               setHandleCheck(!handelcheck)
+          })
+          .catch(function (error) {});
+  }
   return (
     <>
       <Modal size="lg" backdrop="static" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title className="total">
-            Sửa Thông Tin Nhà Cung Cấp
+            Cảnh Báo !
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Row>
-            <Col>
-              <Row>
-                <Form.Label>Tên Nhà Cung Cấp</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-              <Row>
-                <Form.Label>Địa Chỉ</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-            </Col>
-            <Col>
-              <Row>
-                <Form.Label>Số Điện Thoại</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-              <Row>
-                <Form.Label>Tên Nhà Cung Cấp</Form.Label>
-                <Form.Control
-                  type="text"
-                  style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-            </Col>
-          </Row>
+          bạn có chắc chắn muốn xóa  không ?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success">CẬP NHẬT</Button>
+          <Button variant="success" onClick={() => handleDelete(index)}>delete</Button>
           <Button variant="danger" onClick={handleClose}>
             HỦY
           </Button>
