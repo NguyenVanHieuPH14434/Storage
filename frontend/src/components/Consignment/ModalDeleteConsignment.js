@@ -3,7 +3,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 const ModalDeleteConsignment = (props) => {
-  const { show, setShow, dataDelete, fetchListConsignments } = props;
+  const { show, setShow, dataDelete, fetchListConsignments,  } =
+    props;
   const handleClose = () => {
     setShow(false);
   };
@@ -14,7 +15,7 @@ const ModalDeleteConsignment = (props) => {
 
   const handleSubmitDeleteUser = async () => {
     let data = await deleteConsignment(dataDelete._id);
-    console.log(">>> check respon ", data);
+    // console.log(">>> check respon ", data);
 
     handleClose();
     await fetchListConsignments();

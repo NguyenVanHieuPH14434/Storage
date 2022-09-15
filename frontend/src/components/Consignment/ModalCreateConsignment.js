@@ -77,8 +77,8 @@ const ModalCreateConsignment = (props) => {
                   onChange={onChangeForm}
                 >
                   <option> --- Chọn nhà Cung Cấp ---</option>
-                  {listProducer.map((item) => {
-                    return <option>{item.producer_name}</option>;
+                  {listProducer.map((item, index) => {
+                    return <option key={index}>{item.producer_name}</option>;
                   })}
                 </Form.Select>
               </Row>

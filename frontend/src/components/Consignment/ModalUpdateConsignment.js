@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -6,6 +6,7 @@ import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
 import axios from "axios";
+import _ from "lodash";
 
 const ModalUpdateConsignment = (props) => {
   const { show, setShow, listProducer, fetchListConsignments, dataUpdate } =
@@ -16,9 +17,15 @@ const ModalUpdateConsignment = (props) => {
     lot_number: "",
   });
   const { product_name, producer_name, lot_number } = formConsignment;
-  const handleClose = () => {
+  const handleClose = async () => {
     setShow(false);
   };
+
+  useEffect(() => {
+    if (!_.isEmpty(dataUpdate)) {
+      setFormConsignment(dataUpdate);
+    }
+  }, [dataUpdate]);
 
   const onChangeForm = (event) => {
     setFormConsignment({
@@ -27,14 +34,18 @@ const ModalUpdateConsignment = (props) => {
     });
   };
 
-  const handleSubmitForm = async (_id) => {
+  const handleSubmitForm = async () => {
+    // console.log(".....", formConsignment);
     let data = await axios.post(
-      `http://localhost:4000/api/consignment/update/${_id}`,
+      `http://localhost:4000/api/consignment/update/${formConsignment._id}`,
       formConsignment
     );
+
     handleClose();
     await fetchListConsignments();
   };
+
+  // console.log("check update", dataUpdate);
   return (
     <>
       <Modal size="lg" show={show} onHide={handleClose} backdrop="static">
@@ -50,7 +61,7 @@ const ModalUpdateConsignment = (props) => {
                   type="text"
                   name="product_name"
                   style={{ width: "90%", marginLeft: "3%" }}
-                  value={product_name ? product_name : dataUpdate.product_name}
+                  value={product_name}
                   onChange={onChangeForm}
                 />
               </Row>
@@ -60,7 +71,7 @@ const ModalUpdateConsignment = (props) => {
                   type="text"
                   name="lot_number"
                   style={{ width: "90%", marginLeft: "3%" }}
-                  value={lot_number ? lot_number : dataUpdate.lot_number}
+                  value={lot_number}
                   onChange={onChangeForm}
                 />
               </Row>
@@ -76,9 +87,9 @@ const ModalUpdateConsignment = (props) => {
                   onChange={onChangeForm}
                 >
                   <option> --- Chọn nhà Cung Cấp ---</option>
-                  {listProducer.map((item) => {
-    
-                    return <option >{item.producer_name}</option>;
+
+                  {listProducer.map((item, index) => {
+                    return <option key={index}>{item.producer_name}</option>;
                   })}
                 </Form.Select>
               </Row>
@@ -86,7 +97,7 @@ const ModalUpdateConsignment = (props) => {
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={{ handleSubmitForm }}>
+          <Button variant="success" onClick={handleSubmitForm}>
             CẬP NHẬT
           </Button>
           <Button variant="danger" onClick={handleClose}>

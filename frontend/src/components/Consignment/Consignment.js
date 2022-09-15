@@ -28,11 +28,15 @@ const Consignment = () => {
     setShowModalCreateConsignment(true);
   };
 
-  const handleShowUpdateConsignment = (item) => {
+  const handleShowUpdateConsignment = (consignment) => {
     setShowModalUpdateConsignment(true);
-    setListConsignments(item);
-    setDataUpdate(item);
+    setDataUpdate(consignment);
+    // setListConsignments(item);
+    // setDataUpdate(item);
+    // await fetchListConsignments();
+    // console.log("update consignment: ", consignment);
   };
+
 
   const handleShowDeleteConsignment = (item) => {
     setShowModalDeleteConsignment(true);
@@ -50,7 +54,7 @@ const Consignment = () => {
 
   const fetchListConsignments = async () => {
     let response = await getAllConsigment();
-    console.log(response);
+    // console.log(response);
     if (response) {
       setListConsignments(response.data);
     }
@@ -61,7 +65,7 @@ const Consignment = () => {
 
   const fetchListProducer = async () => {
     let response = await getAllProducer();
-    console.log(response);
+    // console.log(response);
     if (response) {
       setListProducer(response.data);
     }
@@ -173,6 +177,7 @@ const Consignment = () => {
           dataUpdate={dataUpdate}
           listProducer={listProducer}
           fetchListConsignments={fetchListConsignments}
+          getConsigment={getConsigment}
         />
       }
       {
