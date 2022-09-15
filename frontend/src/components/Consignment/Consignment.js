@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { getAllConsigment } from "../../services/apiServices";
 import ModalCreateConsignment from "./ModalCreateConsignment";
 import ModalUpdateConsignment from "./ModalUpdateConsignment";
-import axios from "axios";
 import ModalDeleteConsignment from "./ModalDeleteConsignment";
+import { getAllConsigment, getAllProducer } from "../../services/apiServices";
 
 const Consignment = () => {
+  const [listConsignments, setListConsignments] = useState([]);
+  const [listProducer, setListProducer] = useState([]);
+
   const [showModalCreateConsignment, setShowModalCreateConsignment] =
     useState(false);
+
   const [showModalUpdateConsignment, setShowModalUpdateConsignment] =
     useState(false);
   const [dataUpdate, setDataUpdate] = useState({});
+
   const [showModalDeleteConsignment, setShowModalDeleteConsignment] =
     useState(false);
   const [dataDelete, setDataDelete] = useState({});
-
-  const [listConsignments, setListConsignments] = useState([]);
-  const [listProducer, setListProducer] = useState([]);
 
   const handleShowCreateConsignment = () => {
     setShowModalCreateConsignment(true);
@@ -33,10 +32,6 @@ const Consignment = () => {
   const handleShowUpdateConsignment = (consignment) => {
     setShowModalUpdateConsignment(true);
     setDataUpdate(consignment);
-    // setListConsignments(item);
-    // setDataUpdate(item);
-    // await fetchListConsignments();
-    // console.log("update consignment: ", consignment);
   };
 
   const handleShowDeleteConsignment = (item) => {
@@ -44,36 +39,24 @@ const Consignment = () => {
     setDataDelete(item);
   };
 
-  useEffect(() => {
-    fetchListConsignments();
-    fetchListProducer();
-  }, []);
-
-  const getAllConsigment = () => {
-    return axios.get("http://localhost:4000/api/consignment/list");
-  };
-
   const fetchListConsignments = async () => {
     let response = await getAllConsigment();
-    console.log(response);
     if (response) {
       setListConsignments(response.data.docs);
     }
   };
-  const getAllProducer = () => {
-    return axios.get("http://localhost:4000/api/producer/list");
-  };
 
   const fetchListProducer = async () => {
     let response = await getAllProducer();
-    // console.log(response);
     if (response) {
       setListProducer(response.data.docs);
     }
   };
-  const getConsigment = (_id) => {
-    return axios.get(`http://localhost:4000/api/consignment/edit/${_id}`);
-  };
+
+  useEffect(() => {
+    fetchListConsignments();
+    fetchListProducer();
+  }, []);
 
   return (
     <div className="consignment">
@@ -107,24 +90,6 @@ const Consignment = () => {
           </tr>
         </thead>
         <tbody>
-          {/* <tr>
-            <td>1</td>
-            <td>5NJ70UUXAI</td>
-            <td>Amino Plus</td>
-            <td>Lô 1</td>
-            <td>CTTP dược phẩn trung ương 2</td>
-            <td>21-08-2022</td>
-            <td>
-              <Button
-                variant="primary"
-                className="btn"
-                onClick={handleShowUpdateConsignment}
-              >
-                Sửa
-              </Button>
-              <Button variant="danger">Xóa</Button>
-            </td>
-          </tr> */}
           {listConsignments &&
             listConsignments.length > 0 &&
             listConsignments.map((item, index) => {
@@ -178,7 +143,6 @@ const Consignment = () => {
           dataUpdate={dataUpdate}
           listProducer={listProducer}
           fetchListConsignments={fetchListConsignments}
-          getConsigment={getConsigment}
         />
       }
       {

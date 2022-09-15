@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
 import axios from "axios";
@@ -50,8 +49,6 @@ const ModalUpdateConsignment = (props) => {
       return;
     }
 
-    // update data
-    // console.log(".....", formConsignment);
     let data = await axios.post(
       `http://localhost:4000/api/consignment/update/${formConsignment._id}`,
       formConsignment

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
 import "./Consignment.scss";
 import axios from "axios";
@@ -10,16 +9,18 @@ import { toast } from "react-toastify";
 
 const ModalCreateConsignment = (props) => {
   const { show, setShow, listProducer, fetchListConsignments } = props;
-  const handleClose = () => {
-    setShow(false);
-    setFormConsignment({ product_name: "", producer_name: "", lot_number: "" });
-  };
+
   const [formConsignment, setFormConsignment] = useState({
     product_name: "",
     producer_name: "",
     lot_number: "",
   });
   const { product_name, producer_name, lot_number } = formConsignment;
+
+  const handleClose = () => {
+    setShow(false);
+    setFormConsignment({ product_name: "", producer_name: "", lot_number: "" });
+  };
 
   const onChangeForm = (event) => {
     setFormConsignment({
