@@ -7,15 +7,16 @@ import { Row, Col } from "react-bootstrap";
 import "./Storage.scss";
 
 const ModalCreateStorage = (props) => {
-  const {show, setShow} = props;
+  const { show, setShow ,data,checked,handleUpdate,getValue,handleCreate} = props;
   const handleClose = () => {
     setShow(false);
+    window.location.reload()
   };
   return (
     <>
       <Modal size="lg" show={show} onHide={handleClose} backdrop="static">
         <Modal.Header closeButton>
-          <Modal.Title className="total">Thêm Mới Lô</Modal.Title>
+          <Modal.Title className="total">{checked ? 'Update Lô':'Nhập Lô'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Row>
@@ -24,28 +25,40 @@ const ModalCreateStorage = (props) => {
                 <Form.Label>Tên Kệ</Form.Label>
                 <Form.Control
                   type="text"
+                  name="shelf_number"
+                  value={data.shelf_number}
                   style={{ width: "90%", marginLeft: "3%" }}
+                  onChange={getValue}
                 />
               </Row>
               <Row>
                 <Form.Label>Tên Lô</Form.Label>
                 <Form.Control
                   type="text"
+                  name="lot_number"
+                  value={data.lot_number}
                   style={{ width: "90%", marginLeft: "3%" }}
+                  onChange={getValue}
                 />
               </Row>
               <Row>
                 <Form.Label>Sản Phẩm</Form.Label>
                 <Form.Control
                   type="text"
+                  name="product_name"
+                  value={data.product_name}
                   style={{ width: "90%", marginLeft: "3%" }}
+                  onChange={getValue}
                 />
               </Row>
               <Row>
                 <Form.Label>Phân Loại</Form.Label>
                 <Form.Select
+                  name="type"
+                  value={data.type}
                   aria-label="Default select example"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  onChange={getValue}
                 >
                   <option>Chọn Phân Loại</option>
                   <option value="1">Thuốc</option>
@@ -57,36 +70,38 @@ const ModalCreateStorage = (props) => {
               <Row>
                 <Form.Label>Số Lượng</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
+                  name="quantity"
+                  value={data.quantity}
                   style={{ width: "90%", marginLeft: "3%" }}
-                />
-              </Row>
-              <Row>
-                <Form.Label>Ngày Nhập</Form.Label>
-                <Form.Control
-                  type="date"
-                  style={{ width: "90%", marginLeft: "3%" }}
+                  onChange={getValue}
                 />
               </Row>
               <Row>
                 <Form.Label>Ngày Sản Xuất</Form.Label>
                 <Form.Control
                   type="date"
+                  name="nsx"
+                  value={data.nsx}
                   style={{ width: "90%", marginLeft: "3%" }}
+                  onChange={getValue}
                 />
               </Row>
               <Row>
                 <Form.Label>Ngày Hết Hạn</Form.Label>
                 <Form.Control
                   type="date"
+                  name="hsd"
+                  value={data.hsd}
                   style={{ width: "90%", marginLeft: "3%" }}
+                  onChange={getValue}
                 />
               </Row>
             </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success">THÊM MỚI</Button>
+          {checked ? <Button variant="success" onClick={handleUpdate}>Update</Button>:<Button variant="success" onClick={handleCreate}>Thêm Mới</Button>}
           <Button variant="danger" onClick={handleClose}>
             QUAY LẠI
           </Button>
