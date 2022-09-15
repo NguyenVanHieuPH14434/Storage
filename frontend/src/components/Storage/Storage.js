@@ -286,7 +286,10 @@ function Storage() {
         />
       }
       {
-        <Notification index={getKey.current} setShow={setShow} title="Thông Báo Xóa" description="Bạn có chắc chắn muốn xóa không" show={show}/>
+        <Notification index={getKey.current}
+        setShow={setShow} 
+        title="Thông Báo Xóa" 
+        description="Bạn có chắc chắn muốn xóa không" show={show}/>
       }
     </div>
   );
