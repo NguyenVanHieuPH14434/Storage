@@ -61,6 +61,15 @@ function Storage() {
     }, []);
 
     useEffect(() => {
+        if (show === false && showModalCreateStorage === false) {
+            Axios.get('http://localhost:4000/api/storage/list')
+                .then((res, req) => {
+                    setMedicine(res.data.docs);
+                })
+                .catch(() => {
+                    console.log('error');
+                });
+        }
         // Fetch items from another resources.
         const endOffset = itemOffset + itemsPerPage;
         setCurrentItems(medicine.slice(itemOffset, endOffset));
@@ -126,7 +135,6 @@ function Storage() {
                 axios
                     .post(`http://localhost:4000/api/storage/update/${data._id}`, data)
                     .then(() => {
-                        window.location.reload()
                         setChecked(false);
                         setShowModalCreateStorage(!setShowModalCreateStorage);
                         setData({});
