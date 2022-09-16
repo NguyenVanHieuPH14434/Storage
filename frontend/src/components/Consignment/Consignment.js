@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ModalCreateConsignment from './ModalCreateConsignment';
 import ModalUpdateConsignment from './ModalUpdateConsignment';
 import ModalDeleteConsignment from './ModalDeleteConsignment';
+import { FaSearch } from 'react-icons/fa';
 import {
     getAllConsigment,
     getAllProducer,
@@ -57,7 +58,7 @@ const Consignment = () => {
     const fetchListConsignmentsWithPaginate = async (page) => {
         let response = await getConsignmentWithPaginate(page);
         if (response) {
-            console.log(response.data);
+            // console.log(response.data);
             setListConsignments(response.data.docs);
             setPageCount(response.data.totalPage);
         }
@@ -86,10 +87,15 @@ const Consignment = () => {
 
     return (
         <div className="consignment">
+            <br />
             <p className="title">Danh sách nhập kho</p>
+            <br />
             <Form>
                 <Form.Group className="mb-3 fcontainer" controlId="exampleForm.ControlInput1">
-                    <Form.Label className="ftext">Tìm Kiếm Hàng Hóa</Form.Label>
+                    <Form.Label className="ftext">
+                        <FaSearch className="fs-6 text-success" /> &nbsp;
+                        <b className="text-success">Tìm Kiếm Hàng Hóa</b>
+                    </Form.Label>
                     <Form.Control
                         type="text"
                         name="search"
@@ -105,13 +111,13 @@ const Consignment = () => {
             <Table striped bordered hover size="md">
                 <thead>
                     <tr>
-                        <th>STT</th>
-                        <th>ID</th>
-                        <th>Hàng Hóa</th>
-                        <th>Số Lô</th>
-                        <th>Nhà Cung Cấp</th>
-                        <th>Ngày Nhập Kho</th>
-                        <th>Action</th>
+                        <th className="text-center">STT</th>
+                        <th className="text-center">ID</th>
+                        <th className="text-center">Hàng Hóa</th>
+                        <th className="text-center">Số Lô</th>
+                        <th className="text-center">Nhà Cung Cấp</th>
+                        <th className="text-center">Ngày Nhập Kho</th>
+                        <th className="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,20 +126,21 @@ const Consignment = () => {
                         listConsignments.map((item, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{item._id}</td>
+                                    <td className="text-center">{(currentPage - 1) * 10 + index + 1}</td>
+                                    <td className="text-center">{item._id}</td>
                                     <td>{item.product_name}</td>
                                     <td>{item.lot_number}</td>
                                     <td>{item.producer_name}</td>
-                                    <td>{item.ctime}</td>
-                                    <td>
+                                    <td className="text-center">{item.ctime}</td>
+                                    <td className="text-center">
                                         <Button
                                             variant="primary"
                                             className="btn"
                                             onClick={() => handleShowUpdateConsignment(item)}
                                         >
                                             Sửa
-                                        </Button>
+                                        </Button>{' '}
+                                        &nbsp;
                                         <Button variant="danger" onClick={() => handleShowDeleteConsignment(item)}>
                                             Xóa
                                         </Button>
