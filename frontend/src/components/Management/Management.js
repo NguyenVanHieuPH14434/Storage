@@ -48,6 +48,7 @@ const Management = () => {
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   }
+  
   const [showModalCreateManagement, setShowModalCreateManagement] =
     useState(false);
   const [showModalUpdateManagement, setShowModalUpdateManagement] =

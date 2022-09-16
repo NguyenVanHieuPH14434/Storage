@@ -15,16 +15,21 @@ const ModalUpdateManagement = (props) => {
 
   // Update
   const handleUpdate = () => {
-    const update = {
-      shelf_name: props.nameUpdate,
-      shelf_desc: props.descUpdate
+    if (props.nameUpdate !== "" && props.descUpdate !== "") {
+      const update = {
+        shelf_name: props.nameUpdate,
+        shelf_desc: props.descUpdate
+      }
+      axios.post(`http://localhost:4000/api/shelf/update/${props.id}`, update).then((res) => {
+        toast.success('Sửa Thông Tin Kệ Thành Công');
+        props.setName("");
+        props.setDesc("");
+        handleClose();
+      })
     }
-    axios.post(`http://localhost:4000/api/shelf/update/${props.id}`, update).then((res) => {
-      toast.success('Sửa Thông Tin Kệ Thành Công');
-      props.setName("");
-      props.setDesc("");
-      handleClose();
-    })
+    else {
+      toast.warning("Thông Tin Không Được Để Trống");
+    }
   }
 
   return (
@@ -37,11 +42,11 @@ const ModalUpdateManagement = (props) => {
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Tên Kệ</Form.Label>
-              <Form.Control type="text" value={props.nameUpdate} onChange={(e) => props.setName(e.target.value)}/>
+              <Form.Control type="text" value={props.nameUpdate} onChange={(e) => props.setName(e.target.value)} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Ghi Chú</Form.Label>
-              <Form.Control type="text" value={props.descUpdate} onChange={(e) => props.setDesc(e.target.value)}/>
+              <Form.Control type="text" value={props.descUpdate} onChange={(e) => props.setDesc(e.target.value)} />
             </Form.Group>
           </Form>
         </Modal.Body>
