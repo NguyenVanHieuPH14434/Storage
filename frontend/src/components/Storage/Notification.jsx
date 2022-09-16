@@ -8,6 +8,7 @@ function Notification({ description,title, show, setShow, index }) {
     const handleDelete = (i) => {
         axios.delete(`http://localhost:4000/api/storage/delete/${i}`)
             .then((res, req) => {
+                window.location.reload()
                 setShow(false)
                 console.log('success');
             })
