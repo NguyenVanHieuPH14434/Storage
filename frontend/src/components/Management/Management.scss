@@ -16,7 +16,7 @@
             width: 15%;
             font-size: 110%;
         }
-    
+
         .fip {
             width: 30%;
             margin-right: 30%;
@@ -24,16 +24,42 @@
     }
 
     th {
-        width: 25%;
-        background-color:#198754;
+        width: 20%;
+        background-color: #198754;
         color: white;
     }
 
     td {
-        width: 25%;
+        width: 20%;
     }
 
     .btn {
-        margin-right: 3%;
+        margin-right: 5%;
+    }
+
+    ul {
+        display: flex;
+        justify-content: flex-end;
+
+        li {
+            list-style-type: none;
+            border: 0.0625em solid black;
+            padding: 0 0.5%;
+            margin-right: 0.5%;
+        }
+
+        :last-child {
+            margin: 0 0.5%;
+            text-decoration: none;
+            color: black;
+            border-color: gray; 
+        }
+
+        :first-child {
+            margin: 0 0.5%;
+            text-decoration: none;
+            color: black;
+            border-color: gray; 
+        }
     }
 }
