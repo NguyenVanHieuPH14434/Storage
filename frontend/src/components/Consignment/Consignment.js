@@ -16,6 +16,7 @@ import {
     searchConsigment,
 } from '../../services/apiServices';
 import ReactPaginate from 'react-paginate';
+import { toLower } from 'lodash';
 
 const Consignment = () => {
     const [listConsignments, setListConsignments] = useState([]);
@@ -76,13 +77,14 @@ const Consignment = () => {
             fetchListConsignmentsWithPaginate(1);
             fetchListProducer();
         }
-        setListConsignments(listConsignments.filter((el) => el.product_name.includes(search)));
+
+        setListConsignments(listConsignments.filter((item) => item.product_name.toLowerCase().includes(search)));
     }, [search]);
 
     const handlePageClick = (event) => {
         fetchListConsignmentsWithPaginate(+event.selected + 1);
         setCurrentPage(+event.selected + 1);
-        console.log(`User requested page number ${event.selected}`);
+        // console.log(`User requested page number ${event.selected}`);
     };
 
     return (
@@ -158,27 +160,31 @@ const Consignment = () => {
                 </tbody>
             </Table>
             <div className="d-flex justify-content-center">
-                <ReactPaginate
-                    nextLabel="Tiếp >"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={3}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="< Trước"
-                    pageClassName="page-item"
-                    pageLinkClassName="page-link"
-                    previousClassName="page-item"
-                    previousLinkClassName="page-link"
-                    nextClassName="page-item"
-                    nextLinkClassName="page-link"
-                    breakLabel="..."
-                    breakClassName="page-item"
-                    breakLinkClassName="page-link"
-                    containerClassName="pagination"
-                    activeClassName="active"
-                    renderOnZeroPageCount={null}
-                    forcePage={currentPage - 1}
-                />
+                {listConsignments.length * pageCount <= 10 ? (
+                    ''
+                ) : (
+                    <ReactPaginate
+                        nextLabel="Tiếp >"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={3}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="< Trước"
+                        pageClassName="page-item"
+                        pageLinkClassName="page-link"
+                        previousClassName="page-item"
+                        previousLinkClassName="page-link"
+                        nextClassName="page-item"
+                        nextLinkClassName="page-link"
+                        breakLabel="..."
+                        breakClassName="page-item"
+                        breakLinkClassName="page-link"
+                        containerClassName="pagination"
+                        activeClassName="active"
+                        renderOnZeroPageCount={null}
+                        forcePage={currentPage - 1}
+                    />
+                )}
             </div>
 
             {

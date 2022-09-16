@@ -288,4 +288,3 @@ const Producer = () => {
 
 export default Producer;
 
-
