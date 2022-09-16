@@ -9,6 +9,7 @@ import ModalCreateProducer from "./ModalCreateProducer";
 import ModalUpdateProducer from "./ModalUpdateProducer";
 import Axios from "axios"
 import axios from "axios";
+import ReactPaginate from "react-paginate";
 
 
 const Producer = () => {
@@ -18,6 +19,7 @@ const Producer = () => {
   const [isChecked,setIsChecked] = useState(true)
   const [dataSearch,setDataSearch] = useState("")
   let getKey = useRef()
+  
  
 
 
@@ -45,6 +47,25 @@ const Producer = () => {
   })
   const [listInfoProducer,setListInfoProducer] = useState([])
   const [ListData,setListData] = useState([listInfoProducer])
+
+  console.log("a", ListData);
+// phan trang
+  const [pageNumber, setPageNumber] = useState(0);
+  const usersPerPage = 5;
+  const pagesVisited = pageNumber * usersPerPage;
+  const pageCount = Math.ceil(ListData.length / usersPerPage);
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+   
+  };
+
+
+  // const onclickPage = (e) => {
+  //   const x = document.getElementsByClassName("paginationBtns")
+  //   const y = x.getElementsByTagName("a").className = "pageNumberOnClick"
+  // }
+
+  // call api 1 lan 
   useEffect(() =>{
    Axios.get('http://localhost:4000/api/producer/list')
     .then((response) => {
@@ -74,7 +95,8 @@ const Producer = () => {
                           alert("Số điện thoại của bạn không đúng định dạng!");
                          } else {
                                Axios.post("http://localhost:4000/api/producer/create", infoProducer)
-                                    .then(() => {
+                               .then(() => {
+                                      setListInfoProducer([infoProducer ,...listInfoProducer])
                                       setInfoProducer({
                                         _id: "",
                                           producer_name: "",
@@ -82,11 +104,10 @@ const Producer = () => {
                                           producer_phone: "",
                                           producer_email: ""
                                           })
-                                        setHandleCheck(!handelcheck)
+                                          setHandleCheck(!handelcheck)
                                     })
                                     .catch(function (error) {});
 
-                              setListInfoProducer([...listInfoProducer, infoProducer])
                             
                               setShowModalCreateProducer(!showModalCreateProducer)
                          }
@@ -160,6 +181,8 @@ const Producer = () => {
     );
   }, [dataSearch,listInfoProducer]);
 
+
+
   return (
     <div className="producer">
       <p className="title">Danh sách nhà cung cấp</p>
@@ -197,11 +220,13 @@ const Producer = () => {
           </tr>
         </thead>
         <tbody>
-          {ListData.map((post,key) => {
+          {ListData
+          
+          .map((post,key) => {
 
           return(
           <tr key={key}>
-            <td>{key}</td>
+            <td>{key+1}</td>
             <td>{post._id}</td>
             <td>{post.producer_name}</td>
             <td>{post.producer_address}</td>
@@ -218,10 +243,21 @@ const Producer = () => {
               <Button variant="danger" onClick={() => onclickDelete(post._id)}>Xóa</Button>
             </td>
           </tr>
-          )})}
+          )}).slice(pagesVisited, pagesVisited + usersPerPage)}
         </tbody>
       </Table>
-      
+      <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          // onClick = {(e) => onclickPage(e)}
+          pageCount={pageCount}
+          onPageChange={changePage}
+          containerClassName={"paginationBtns"}
+          previousLinkClassName={"previousBtn"}
+          nextLinkClassName={"nextBtn"}
+          disabledClassName={"paginationDisabled"}
+          activeClassName={"paginationActive"}
+        />
         <ModalCreateProducer
           show={showModalCreateProducer}
           setShow={setShowModalCreateProducer}
