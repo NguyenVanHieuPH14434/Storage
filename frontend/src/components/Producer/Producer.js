@@ -60,11 +60,7 @@ const Producer = () => {
   };
 
 
-  // const onclickPage = (e) => {
-  //   const x = document.getElementsByClassName("paginationBtns")
-  //   const y = x.getElementsByTagName("a").className = "pageNumberOnClick"
-  // }
-
+  
   // call api 1 lan 
   useEffect(() =>{
    Axios.get('http://localhost:4000/api/producer/list')
