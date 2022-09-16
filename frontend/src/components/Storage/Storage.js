@@ -219,7 +219,7 @@ function Storage() {
                                 currentItems
                                     .map((el, i) => {
                                         return (
-                                            <tr key={i}>
+                                            <tr key={(currentPage - 1) * 10 + i + 1}>
                                                 <td>{(currentPage - 1) * 10 + i + 1}</td>
                                                 <td>{el.lot_number}</td>
                                                 <td>{el.product_name}</td>
