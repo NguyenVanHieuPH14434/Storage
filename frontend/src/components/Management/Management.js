@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from "react-paginate";
 import "./Management.scss";
@@ -22,7 +22,7 @@ const Management = () => {
   const [id, setId] = useState("");
   const [nameUpdate, setNameUpdate] = useState("");
   const [descUpdate, setDescUpdate] = useState("");
-  
+
   const handleChange = (id) => {
     setId(id);
     axios.get(`http://localhost:4000/api/shelf/edit/${id}`).then((res) => {
@@ -32,9 +32,26 @@ const Management = () => {
     })
   }
 
+  // Modal box delete
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // Show modal box delete 
+  const [idDelete, setIdDelete] = useState("");
+  const handleShowDelete = (id) => {
+    handleShow();
+    setIdDelete(id);
+  }
+
   // Delete 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:4000/api/shelf/delete/${id}`);
+    axios.delete(`http://localhost:4000/api/shelf/delete/${id}`).then((res) => {
+      toast.success('Xóa Kệ Thành Công');
+      setIdDelete("");
+      handleClose();
+    });
   }
 
   // Search
@@ -48,11 +65,15 @@ const Management = () => {
   const changePage = ({ selected }) => {
     setPageNumber(selected);
   }
-  
+
+  // Modal box add
   const [showModalCreateManagement, setShowModalCreateManagement] =
     useState(false);
+
+  // Modal box change
   const [showModalUpdateManagement, setShowModalUpdateManagement] =
     useState(false);
+
   return (
     <div className="management">
       <p className="title">Danh sách kệ</p>
@@ -62,7 +83,7 @@ const Management = () => {
           controlId="exampleForm.ControlInput1"
         >
           <Form.Label className="ftext">Tìm Kiếm Kệ</Form.Label>
-          <Form.Control type="text" placeholder="Nhập tên kệ" className="fip" value={search} onChange = {(e) => setsearch(e.target.value)}/>
+          <Form.Control type="text" placeholder="Nhập tên kệ" className="fip" value={search} onChange={(e) => setsearch(e.target.value)} />
           <Button
             variant="success"
             onClick={() => setShowModalCreateManagement(true)}
@@ -83,32 +104,32 @@ const Management = () => {
         </thead>
         <tbody>
           {shelf
-          .slice(pagesVisited, pagesVisited + userPerPage)
-          .filter((element) => {
-            if(element.shelf_name.includes(search)) {
-              return element;
-            }
-          })
-          .map((element, index) => {
-            return (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{element._id}</td>
-                <td>{element.shelf_name}</td>
-                <td>{element.shelf_desc}</td>
-                <td>
-                  <Button
-                    variant="primary"
-                    className="btn"
-                    onClick={() => handleChange(element._id)}
-                  >
-                    Sửa
-                  </Button>
-                  <Button variant="danger" onClick={() => handleDelete(element._id)}>Xóa</Button>
-                </td>
-              </tr>
-            );
-          })}
+            .slice(pagesVisited, pagesVisited + userPerPage)
+            .filter((element) => {
+              if (element.shelf_name.includes(search)) {
+                return element;
+              }
+            })
+            .map((element, index) => {
+              return (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{element._id}</td>
+                  <td>{element.shelf_name}</td>
+                  <td>{element.shelf_desc}</td>
+                  <td>
+                    <Button
+                      variant="primary"
+                      className="btn"
+                      onClick={() => handleChange(element._id)}
+                    >
+                      Sửa
+                    </Button>
+                    <Button variant="danger" onClick={() => handleShowDelete(element._id)}>Xóa</Button>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
         {
           <ModalCreateManagement
@@ -121,36 +142,52 @@ const Management = () => {
             show={showModalUpdateManagement}
             setShow={setShowModalUpdateManagement}
             id={id}
-            nameUpdate = {nameUpdate}
-            setName = {setNameUpdate}
-            descUpdate = {descUpdate}
-            setDesc = {setDescUpdate}
+            nameUpdate={nameUpdate}
+            setName={setNameUpdate}
+            descUpdate={descUpdate}
+            setDesc={setDescUpdate}
           />
         }
       </Table>
       <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={pageCount}
-          onPageChange={changePage}
-          containerClassName={"paginationBttns"}
-          previousLinkClassName={"previousBttn"}
-          nextLinkClassName={"nextBttn"}
-          disabledClassName={"paginationDisabled"}
-          activeClassName={"paginationActive"}
-        />
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        breakLabel="..."
+        pageCount={pageCount}
+        onPageChange={changePage}
+        containerClassName={"paginationBttns"}
+        previousLinkClassName={"previousBttn"}
+        nextLinkClassName={"nextBttn"}
+        disabledClassName={"paginationDisabled"}
+        activeClassName={"paginationActive"}
+      />
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title className="total">Xác nhận</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xóa !!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => handleDelete(idDelete)}>
+            XÓA
+          </Button>
+          <Button variant="danger" onClick={handleClose}>
+            HỦY
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
