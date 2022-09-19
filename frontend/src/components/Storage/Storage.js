@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Form from 'react-bootstrap/Form';
@@ -11,14 +11,17 @@ import ModalCreateStorage from './ModalCreateStorage';
 import Axios from 'axios';
 import Notification from './Notification';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 function Storage() {
-    let itemsPerPage = 10;
     const [show, setShow] = useState(false);
     const [showModalCreateStorage, setShowModalCreateStorage] = useState(false);
     const [checked, setChecked] = useState(false);
     const [medicine, setMedicine] = useState([]);
     const [tabIndex, setTabIndex] = useState('');
     const [search, setSearch] = useState('');
+    const [handleCheck, setHandleCheck] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState({
         shelf_number: '',
@@ -29,28 +32,11 @@ function Storage() {
         nsx: '',
         hsd: '',
     });
-    console.log(data);
     // phan trang
-    const [currentItems, setCurrentItems] = useState([]);
-    const [pageCount, setPageCount] = useState(0);
-    let Count = 0;
-    let sum = Count * itemsPerPage;
-    // Here we use item offsets; we could also use page offsets
-    // following the API or data you're working with.
-    const [itemOffset, setItemOffset] = useState(0);
+    const [currentItems, setCurrentItems] = useState(medicine);
 
     useEffect(() => {
-        if (show === false && showModalCreateStorage === false) {
-            Axios.get('http://localhost:4000/api/storage/list')
-                .then((res, req) => {
-                    setMedicine(res.data.docs);
-                })
-                .catch(() => {
-                    console.log('error');
-                });
-        }
-    }, [show, showModalCreateStorage]);
-    useEffect(() => {
+        console.log('1');
         Axios.get('http://localhost:4000/api/storage/list')
             .then((res, req) => {
                 setMedicine(res.data.docs);
@@ -58,34 +44,27 @@ function Storage() {
             .catch(() => {
                 console.log('error');
             });
-    }, []);
+    }, [handleCheck]);
 
-    useEffect(() => {
-        if (show === false && showModalCreateStorage === false) {
-            Axios.get('http://localhost:4000/api/storage/list')
-                .then((res, req) => {
-                    setMedicine(res.data.docs);
-                })
-                .catch(() => {
-                    console.log('error');
-                });
-        }
-        // Fetch items from another resources.
-        const endOffset = itemOffset + itemsPerPage;
-        setCurrentItems(medicine.slice(itemOffset, endOffset));
-        setPageCount(Math.ceil(medicine.length / itemsPerPage));
-    }, [itemOffset, itemsPerPage, medicine]);
-
-    // Invoke when user click to request another page.
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % medicine.length;
-        setItemOffset(newOffset);
-        setCurrentPage(+event.selected + 1);
+    const [pageNumber, setPageNumber] = useState(0);
+    const usersPerPage = 10;
+    const pagesVisited = pageNumber * usersPerPage;
+    const pageCount = Math.ceil(currentItems.length / usersPerPage);
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
     };
-
-    useEffect(() => {
-        setCurrentItems(medicine.filter((el) => el.product_name.includes(search)));
+    const searchIn = useMemo(() => {
+        setCurrentItems(
+            medicine.filter((el) => {
+                return (
+                    el.product_name.toLowerCase().includes(search.toLowerCase()) ||
+                    el._id.toLowerCase().includes(search.toLowerCase()) ||
+                    el.ctime.includes(search)
+                );
+            }),
+        );
     }, [search, medicine]);
+    // Invoke when user click to request another page.
 
     const getValue = (e) => {
         let name = e.target.name;
@@ -93,6 +72,24 @@ function Storage() {
         setData({ ...data, [name]: value });
     };
     let getKey = useRef();
+    //sort name
+    function compare(a, b) {
+        // Dùng toUpperCase() để không phân biệt ký tự hoa thường
+        const product_nameA = a.product_name.toUpperCase();
+        const product_nameB = b.product_name.toUpperCase();
+        let comparison = 0;
+        if (product_nameA > product_nameB) {
+            comparison = 1;
+        } else if (product_nameA < product_nameB) {
+            comparison = -1;
+        }
+        return comparison;
+    }
+
+    const handleSort = () => {
+        medicine.sort(compare);
+        setCurrentItems(medicine);
+    };
     const checkValidate = (n) => {
         //create
         if (tabIndex === '1') {
@@ -108,9 +105,12 @@ function Storage() {
                 axios
                     .post('http://localhost:4000/api/storage/create', n)
                     .then(() => {
-                        setMedicine(medicine);
+                        setCurrentPage(1);
+                        setHandleCheck(!handleCheck);
+                        setCurrentItems(currentItems);
                         setShowModalCreateStorage(false);
                         setData({});
+                        toast.success('Thêm Thành Công!');
                         console.log('success!');
                     })
                     .catch(() => {
@@ -118,7 +118,7 @@ function Storage() {
                     });
             } else {
                 setShowModalCreateStorage(true);
-                alert('Vui lòng nhập đầy đủ Thông Tin');
+                toast.warn('Vui lòng nhập đầy đủ Thông Tin !');
             }
         }
         //update
@@ -135,9 +135,12 @@ function Storage() {
                 axios
                     .post(`http://localhost:4000/api/storage/update/${data._id}`, data)
                     .then(() => {
+                        // setMedicine(medicine)
+                        setHandleCheck(!handleCheck);
                         setChecked(false);
                         setShowModalCreateStorage(!setShowModalCreateStorage);
                         setData({});
+                        toast.success('Update Thành Công!');
                         console.log('success!');
                     })
                     .catch(() => {
@@ -145,7 +148,7 @@ function Storage() {
                     });
             } else {
                 setShowModalCreateStorage(true);
-                alert('Vui lòng nhập đầy đủ Thông Tin');
+                toast.warn('Vui lòng nhập đầy đủ Thông Tin !');
             }
         }
     };
@@ -196,21 +199,25 @@ function Storage() {
                             <Button variant="success" onClick={() => handleShowCreate()}>
                                 THÊM MỚI
                             </Button>
+                            <Button variant="success" onClick={() => handleSort()}>
+                                Sắp Xếp
+                            </Button>
                         </Form.Group>
                     </Form>
                     <Table striped bordered hover size="md">
                         <thead>
                             <tr>
                                 <th>STT</th>
+                                <th>Id</th>
                                 <th>Số Lô</th>
                                 <th>Tên Hàng Hóa</th>
                                 <th>Kệ</th>
                                 <th>Loại</th>
                                 <th>SL</th>
-                                <th>Mã QR</th>
                                 <th>NSX</th>
                                 <th>HSD</th>
                                 <th>Ngày Nhập</th>
+                                <th>Mã QR</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -219,17 +226,20 @@ function Storage() {
                                 currentItems
                                     .map((el, i) => {
                                         return (
-                                            <tr key={(currentPage - 1) * 10 + i + 1}>
-                                                <td>{(currentPage - 1) * 10 + i + 1}</td>
+                                            <tr key={i + 1}>
+                                                <td>{i + 1}</td>
+                                                <td>{el._id}</td>
                                                 <td>{el.lot_number}</td>
                                                 <td>{el.product_name}</td>
                                                 <td>{el.shelf_number}</td>
                                                 <td>{el.type}</td>
                                                 <td>{el.quantity}</td>
-                                                <td></td>
                                                 <td>{el.nsx}</td>
                                                 <td>{el.hsd}</td>
                                                 <td>{el.ctime}</td>
+                                                <td>
+                                                    <img className="qr_code" alt="" src={el.qr_code} />{' '}
+                                                </td>
                                                 <td>
                                                     <Button
                                                         variant="primary"
@@ -245,7 +255,7 @@ function Storage() {
                                             </tr>
                                         );
                                     })
-                                    .slice(sum, sum + itemsPerPage)}
+                                    .slice(pagesVisited, pagesVisited + usersPerPage)}
                         </tbody>
                     </Table>
                 </Tab>
@@ -280,9 +290,10 @@ function Storage() {
                     </Table>
                 </Tab>
             </Tabs>
+            {searchIn}
             <ReactPaginate
                 nextLabel="next >"
-                onPageChange={handlePageClick}
+                onPageChange={changePage}
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
                 pageCount={pageCount}
@@ -299,6 +310,7 @@ function Storage() {
                 containerClassName="pagination"
                 activeClassName="active"
                 renderOnZeroPageCount={null}
+                // forcePage={currentPage - 1}
             />
             {
                 <ModalCreateStorage
@@ -309,6 +321,8 @@ function Storage() {
                     handleUpdate={handleUpdate}
                     show={showModalCreateStorage}
                     setShow={setShowModalCreateStorage}
+                    setData={setData}
+                    setChecked={setChecked}
                 />
             }
             {
@@ -318,6 +332,25 @@ function Storage() {
                     title="Thông Báo Xóa"
                     description="Bạn có chắc chắn muốn xóa không"
                     show={show}
+                    setCurrentItems={setCurrentItems}
+                    medicine={medicine}
+                    setCurrentPage={setCurrentPage}
+                    currentPage={currentPage}
+                    setHandleCheck={setHandleCheck}
+                    handleCheck={handleCheck}
+                />
+            }
+            {
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
                 />
             }
         </div>

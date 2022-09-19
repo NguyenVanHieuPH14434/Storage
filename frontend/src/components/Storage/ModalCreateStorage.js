@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { Row, Col } from "react-bootstrap";
+import axios from 'axios';
 import "./Storage.scss";
 
 const ModalCreateStorage = (props) => {
-  const { show, setShow ,data,checked,handleUpdate,getValue,handleCreate} = props;
+  const { show, setShow ,data,checked,handleUpdate,getValue,handleCreate,setData,setChecked} = props;
   const handleClose = () => {
     setShow(false);
-    window.location.reload()
+    setData({})
+    setChecked(false)
   };
+  const [shelf, setShelf] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:4000/api/shelf/list").then((res) => setShelf(res.data.docs));
+  }, [shelf]);
   return (
     <>
       <Modal size="lg" show={show} onHide={handleClose} backdrop="static">
@@ -23,13 +29,18 @@ const ModalCreateStorage = (props) => {
             <Col>
               <Row>
                 <Form.Label>Tên Kệ</Form.Label>
-                <Form.Control
+                <Form.Select
                   type="text"
                   name="shelf_number"
                   value={data.shelf_number}
                   style={{ width: "90%", marginLeft: "3%" }}
                   onChange={getValue}
-                />
+                >
+                  <option> --- Chọn kệ ---</option>
+                    {shelf.map((el, i) => {
+                      return <option key={i}>{el.shelf_name}</option>;
+                    })}
+                  </Form.Select>
               </Row>
               <Row>
                 <Form.Label>Tên Lô</Form.Label>
