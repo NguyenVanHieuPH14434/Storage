@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
 import "./Management.scss";
 
 const ModalCreateManagement = (props) => {
@@ -13,15 +12,6 @@ const ModalCreateManagement = (props) => {
   const handleClose = () => {
     setShow(false);
   };
-
-  // Toast message
-  const showToastMessageSucess = () => {
-    toast.success('Thêm Mới Kệ Thành Công');
-  };
-
-  const showToastMessageWarning = () => {
-    toast.warning('Thông Tin Không Được Để Trống');
-  }
 
   // Add
   const [nameAdd, setNameAdd] = useState("");
@@ -41,7 +31,7 @@ const ModalCreateManagement = (props) => {
       });
     }
     else {
-      showToastMessageWarning();
+      toast.warning("Thông Tin Không Được Để Trống");
     }
 
   }
