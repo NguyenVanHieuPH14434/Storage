@@ -177,6 +177,29 @@ const Producer = () => {
     );
   }, [dataSearch,listInfoProducer]);
 
+  //sort
+  function compare ( a , b ) {
+  // Dùng toUpperCase() để không phân biệt ký tự hoa thường
+  const producer_nameA = a.producer_name.toUpperCase ( ) ;
+  const producer_nameB = b.producer_name.toUpperCase ( ) ;
+ 
+  let comparison = 0 ;
+  if ( producer_nameA > producer_nameB ) {
+    comparison = 1 ;
+  } else if (producer_nameA <producer_nameB ) {
+    comparison = - 1 ;
+  }
+  return comparison ;
+}
+ 
+
+
+const handleSort = () => {
+  listInfoProducer.sort( compare ) ;
+    
+    setListData(listInfoProducer)
+}
+
 
 
   return (
@@ -200,6 +223,12 @@ const Producer = () => {
             onClick={() => setShowModalCreateProducer(!showModalCreateProducer)}
           >
             THÊM MỚI
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => handleSort()}
+          >
+            Sắp xếp
           </Button>
         </Form.Group>
       </Form>
