@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { Row, Col } from "react-bootstrap";
 import "./Producer.scss";
-const ModalUpdateProducer = (props) => {
-  const { show, setShow } = props;
+import axios from "axios";
+const ModalCreateProducer = (props) => {
+  const { show, setShow, infoProducer, onChangeInfoProducer,handleCreate, 
+    handleUpdate,
+    handleCheck,
+    setHandleCheck,
+    isChecked}
+   = props;
   const handleClose = () => {
+    
     setShow(false);
+   window.location.reload()
   };
+ 
   return (
     <>
       <Modal size="lg" backdrop="static" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title className="total">
-            Sửa Thông Tin Nhà Cung Cấp
-          </Modal.Title>
+         {isChecked? (<Modal.Title className="total">Thêm Mới Nhà Cung Cấp</Modal.Title>) :
+         (<Modal.Title className="total">Cập Nhật  Nhà Cung Cấp</Modal.Title>)
+        }
         </Modal.Header>
         <Modal.Body>
           <Row>
@@ -25,6 +34,9 @@ const ModalUpdateProducer = (props) => {
                 <Form.Control
                   type="text"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  name = "producer_name"
+                  value = {infoProducer.producer_name}
+                  onChange = {(e) => onChangeInfoProducer(e)}
                 />
               </Row>
               <Row>
@@ -32,6 +44,10 @@ const ModalUpdateProducer = (props) => {
                 <Form.Control
                   type="text"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  name = "producer_address"
+                  value = {infoProducer.producer_address}
+                  onChange = {(e) => onChangeInfoProducer(e)}
+                
                 />
               </Row>
             </Col>
@@ -41,22 +57,35 @@ const ModalUpdateProducer = (props) => {
                 <Form.Control
                   type="text"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  name = "producer_phone"
+                  value = {infoProducer.producer_phone}
+                  onChange = {(e) => onChangeInfoProducer(e)}
                 />
               </Row>
               <Row>
-                <Form.Label>Tên Nhà Cung Cấp</Form.Label>
+                <Form.Label>Email Nhà Cung Cấp</Form.Label>
                 <Form.Control
                   type="text"
                   style={{ width: "90%", marginLeft: "3%" }}
+                  name = "producer_email"
+                  value = {infoProducer.producer_email}
+                  onChange = {(e) => onChangeInfoProducer(e)}
                 />
               </Row>
             </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success">CẬP NHẬT</Button>
+          {isChecked?
+          (<Button variant="success" onClick={handleCreate}>
+            THÊM MỚI
+          </Button>) :
+          (<Button variant="success" onClick={() => handleUpdate(infoProducer)}>
+            Update
+          </Button>)
+          }   
           <Button variant="danger" onClick={handleClose}>
-            HỦY
+            QUAY LẠI
           </Button>
         </Modal.Footer>
       </Modal>
@@ -64,4 +93,4 @@ const ModalUpdateProducer = (props) => {
   );
 };
 
-export default ModalUpdateProducer;
+export default ModalCreateProducer;
