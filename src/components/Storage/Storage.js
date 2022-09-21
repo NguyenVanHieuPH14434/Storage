@@ -192,7 +192,7 @@ function Storage() {
     console.log('warn');
     const handleUpdate = () => {
         checkValidate(data);
-        setTabIndex('2');
+        setTabIndex('2')
     };
 
     // useEffect(()=>{
