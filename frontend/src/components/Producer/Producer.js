@@ -18,6 +18,7 @@ const Producer = () => {
   const [handelcheck, setHandleCheck] = useState(false)
   const [isChecked,setIsChecked] = useState(true)
   const [dataSearch,setDataSearch] = useState("")
+  const [checkSort,setCheckSort] = useState(true)
   let getKey = useRef()
   
  
@@ -60,11 +61,7 @@ const Producer = () => {
   };
 
 
-  // const onclickPage = (e) => {
-  //   const x = document.getElementsByClassName("paginationBtns")
-  //   const y = x.getElementsByTagName("a").className = "pageNumberOnClick"
-  // }
-
+  
   // call api 1 lan 
   useEffect(() =>{
    Axios.get('http://localhost:4000/api/producer/list')
@@ -181,6 +178,36 @@ const Producer = () => {
     );
   }, [dataSearch,listInfoProducer]);
 
+  //sort
+  function compare ( a , b ) {
+  // Dùng toUpperCase() để không phân biệt ký tự hoa thường
+  const producer_nameA = a.producer_name.toUpperCase ( ) ;
+  const producer_nameB = b.producer_name.toUpperCase ( ) ;
+  setCheckSort(!checkSort)
+
+  let comparison = 0 ;
+  let result = true
+  if ( producer_nameA > producer_nameB ) {
+    comparison = 1 ;
+  } else if (producer_nameA <producer_nameB ) {
+    comparison = - 1 ;
+  }
+  if(checkSort == true){
+
+    return comparison ;
+  } else {
+    return comparison * -1
+  }
+}
+ 
+
+
+const handleSort = () => {
+  listInfoProducer.sort( compare ) ;
+    
+    setListData(listInfoProducer)
+}
+
 
 
   return (
@@ -204,6 +231,12 @@ const Producer = () => {
             onClick={() => setShowModalCreateProducer(!showModalCreateProducer)}
           >
             THÊM MỚI
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => handleSort()}
+          >
+          Sắp xếp ⬆⬇
           </Button>
         </Form.Group>
       </Form>
