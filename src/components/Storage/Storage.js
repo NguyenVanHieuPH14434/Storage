@@ -23,6 +23,8 @@ function Storage() {
     const [search, setSearch] = useState('');
     const [handleCheck, setHandleCheck] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [sortName,setSortName]=useState(false)
+    console.log(sortName)
     const [data, setData] = useState({
         shelf_number: '',
         lot_number: '',
@@ -55,7 +57,7 @@ function Storage() {
     };
     const searchIn = useMemo(() => {
         setCurrentItems(
-            medicine.filter((el) => {
+            medicine.filter((el) => { 
                 return (
                     el.product_name.toLowerCase().includes(search.toLowerCase()) ||
                     el._id.toLowerCase().includes(search.toLowerCase()) ||
@@ -73,7 +75,7 @@ function Storage() {
     };
     let getKey = useRef();
     //sort name
-    function compare(a, b) {
+    function inCrea(a, b) {
         // Dùng toUpperCase() để không phân biệt ký tự hoa thường
         const product_nameA = a.product_name.toUpperCase();
         const product_nameB = b.product_name.toUpperCase();
@@ -85,9 +87,27 @@ function Storage() {
         }
         return comparison;
     }
+    function deCrea(a, b) {
+        // Dùng toUpperCase() để không phân biệt ký tự hoa thường
+        const product_nameA = a.product_name.toUpperCase();
+        const product_nameB = b.product_name.toUpperCase();
+        let comparison = 0;
+        if (product_nameA < product_nameB) {
+            comparison = 1;
+        } else if (product_nameA > product_nameB) {
+            comparison = -1;
+        }
+        return comparison;
+    }
 
     const handleSort = () => {
-        medicine.sort(compare);
+        if(sortName===false){
+            medicine.sort(deCrea)
+        }
+        if(sortName===true){
+            medicine.sort(inCrea)
+        }
+        setSortName(!sortName)
         setCurrentItems(medicine);
     };
     const checkValidate = (n) => {
@@ -105,7 +125,6 @@ function Storage() {
                 axios
                     .post('http://localhost:4000/api/storage/create', n)
                     .then(() => {
-                        setCurrentPage(1);
                         setHandleCheck(!handleCheck);
                         setCurrentItems(currentItems);
                         setShowModalCreateStorage(false);
@@ -161,7 +180,9 @@ function Storage() {
     const handleDelete = (i) => {
         getKey.current = i;
         setShow(true);
+        console.log(i)
     };
+    console.log(getKey.current)
     const handleShowCreate = () => {
         setShowModalCreateStorage(true);
         setTabIndex('1');
