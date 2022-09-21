@@ -16,11 +16,13 @@ import {
     searchConsigment,
 } from '../../services/apiServices';
 import ReactPaginate from 'react-paginate';
-import { toLower } from 'lodash';
+import _, { result, reverse, toLower } from 'lodash';
 
 const Consignment = () => {
     const [listConsignments, setListConsignments] = useState([]);
     const [listProducer, setListProducer] = useState([]);
+    const [sortt, setSortt] = useState([]);
+    const [reserve, setReserve] = useState([]);
 
     const [showModalCreateConsignment, setShowModalCreateConsignment] = useState(false);
 
@@ -78,13 +80,47 @@ const Consignment = () => {
             fetchListProducer();
         }
 
-        setListConsignments(listConsignments.filter((item) => item.product_name.toLowerCase().includes(search)));
+        setListConsignments(sortt);
+        setListConsignments(reserve);
+
+        // setListConsignments(listConsignments.filter((item) => item._id.toLowerCase().includes(search.toLowerCase())));
     }, [search]);
 
     const handlePageClick = (event) => {
         fetchListConsignmentsWithPaginate(+event.selected + 1);
         setCurrentPage(+event.selected + 1);
         // console.log(`User requested page number ${event.selected}`);
+    };
+
+    const handleSort = () => {
+        const data = listConsignments.sort((a, b) => {
+            let res = 0;
+            if (a.product_name.toLowerCase() > b.product_name.toLowerCase()) {
+                res = 1;
+            } else {
+                res = -1;
+            }
+
+            return res;
+        });
+
+        setSortt(data);
+        console.log(data);
+    };
+    const handleReserve = () => {
+        const data = listConsignments.sort((a, b) => {
+            let res = 0;
+            if (a.product_name.toLowerCase() < b.product_name.toLowerCase()) {
+                res = 1;
+            } else {
+                res = -1;
+            }
+
+            return res;
+        });
+
+        setReserve(data);
+        console.log(data);
     };
 
     return (
@@ -101,7 +137,7 @@ const Consignment = () => {
                     <Form.Control
                         type="text"
                         name="search"
-                        onChange={(ev) => setSearch(ev.target.value)}
+                        onChange={(ev) => setSearch(ev.target.value.toLowerCase())}
                         placeholder="Nhâp tên hàng hóa"
                         className="fip"
                     />
@@ -115,7 +151,13 @@ const Consignment = () => {
                     <tr>
                         <th className="text-center">STT</th>
                         <th className="text-center">ID</th>
-                        <th className="text-center">Hàng Hóa</th>
+                        <th className="text-center">
+                            <span>Hàng Hóa</span>
+                            <span>
+                                <i className="fa-solid fa-arrow-down-long" onClick={() => handleSort()}></i>
+                                <i className="fa-solid fa-arrow-up-long" onClick={() => handleReserve()}></i>
+                            </span>
+                        </th>
                         <th className="text-center">Số Lô</th>
                         <th className="text-center">Nhà Cung Cấp</th>
                         <th className="text-center">Ngày Nhập Kho</th>
@@ -125,31 +167,37 @@ const Consignment = () => {
                 <tbody>
                     {listConsignments &&
                         listConsignments.length > 0 &&
-                        listConsignments.map((item, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td className="text-center">{(currentPage - 1) * 10 + index + 1}</td>
-                                    <td className="text-center">{item._id}</td>
-                                    <td>{item.product_name}</td>
-                                    <td>{item.lot_number}</td>
-                                    <td>{item.producer_name}</td>
-                                    <td className="text-center">{item.ctime}</td>
-                                    <td className="text-center">
-                                        <Button
-                                            variant="primary"
-                                            className="btn"
-                                            onClick={() => handleShowUpdateConsignment(item)}
-                                        >
-                                            Sửa
-                                        </Button>{' '}
-                                        &nbsp;
-                                        <Button variant="danger" onClick={() => handleShowDeleteConsignment(item)}>
-                                            Xóa
-                                        </Button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        listConsignments
+                            .filter(
+                                (item) =>
+                                    item._id.toLowerCase().includes(search) ||
+                                    item.ctime.toLowerCase().includes(search),
+                            )
+                            .map((item, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td className="text-center">{(currentPage - 1) * 10 + index + 1}</td>
+                                        <td className="text-center">{item._id}</td>
+                                        <td>{item.product_name}</td>
+                                        <td>{item.lot_number}</td>
+                                        <td>{item.producer_name}</td>
+                                        <td className="text-center">{item.ctime}</td>
+                                        <td className="text-center">
+                                            <Button
+                                                variant="primary"
+                                                className="btn"
+                                                onClick={() => handleShowUpdateConsignment(item)}
+                                            >
+                                                Sửa
+                                            </Button>{' '}
+                                            &nbsp;
+                                            <Button variant="danger" onClick={() => handleShowDeleteConsignment(item)}>
+                                                Xóa
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     {listConsignments && listConsignments.length === 0 && (
                         <tr>
                             <td colSpan={'7'} align={'center'}>
@@ -160,7 +208,7 @@ const Consignment = () => {
                 </tbody>
             </Table>
             <div className="d-flex justify-content-center">
-                {listConsignments.length * pageCount <= 10 ? (
+                {listConsignments.length * pageCount <= 10 || search !== '' ? (
                     ''
                 ) : (
                     <ReactPaginate
