@@ -74,6 +74,11 @@ const Management = () => {
   const [showModalUpdateManagement, setShowModalUpdateManagement] =
     useState(false);
 
+  // Sort
+  const [count, setCount] = useState(0);
+  const handleSort = () => {
+    setCount(count + 1);
+  }
   return (
     <div className="management">
       <p className="title">Danh sách kệ</p>
@@ -90,6 +95,12 @@ const Management = () => {
           >
             THÊM MỚI
           </Button>
+          <Button
+            variant="success"
+            onClick={() => handleSort()}
+          >
+            SẮP XẾP
+          </Button>
         </Form.Group>
       </Form>
       <Table striped bordered hover size="md">
@@ -105,6 +116,7 @@ const Management = () => {
         <tbody>
           {shelf
             .slice(pagesVisited, pagesVisited + userPerPage)
+            .sort((a, b) => count % 2 !== 0 ? Number(b.shelf_name.slice(2)) - (Number(a.shelf_name.slice(2))) : Number(a.shelf_name.slice(2)) - (Number(b.shelf_name.slice(2))))
             .filter((element) => {
               if (element.shelf_name.includes(search)) {
                 return element;

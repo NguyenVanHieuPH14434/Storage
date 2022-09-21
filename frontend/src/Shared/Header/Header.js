@@ -48,30 +48,20 @@ const Header = () => {
                   <p className="para2">KHO</p>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item>
-                    <Link to="/producer" className="link">
-                      Nhà Cung Cấp
-                    </Link>
+                  <Dropdown.Item as={Link} to="/producer">
+                    Nhà Cung Cấp
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Link to="/consignment" className="link">
-                      Nhập Lô
-                    </Link>
+                  <Dropdown.Item as={Link} to="/consignment">
+                    Nhập Lô
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Link to="/storage" className="link">
-                      Lưu kho
-                    </Link>
+                  <Dropdown.Item as={Link} to="/storage">
+                    Lưu kho
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Link to="/pharmacy" className="link">
-                      Thuốc
-                    </Link>
+                  <Dropdown.Item as={Link} to="/pharmacy">
+                    Thuốc
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Link to="/management" className="link">
-                      Quản Lý Kệ thuốc
-                    </Link>
+                  <Dropdown.Item as={Link} to="/management">
+                    Quản Lý Kệ thuốc
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -112,11 +102,11 @@ const Header = () => {
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Mật Khẩu Mới</Form.Label>
-              <Form.Control type="text" />
+              <Form.Control type="password" />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Xác Nhận Lại Mật Khẩu Mới</Form.Label>
-              <Form.Control type="text" />
+              <Form.Control type="password" />
             </Form.Group>
           </Form>
         </Modal.Body>
