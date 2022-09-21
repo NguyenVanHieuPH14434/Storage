@@ -15,7 +15,7 @@ import ReactPaginate from "react-paginate";
 const Producer = () => {
   const [showModalCreateProducer, setShowModalCreateProducer] = useState(false);
   const [showModalUpdateProducer, setShowModalUpdateProducer] = useState(false);
-  const [handelcheck, setHandleCheck] = useState(false)
+  const [handelCheck, setHandleCheck] = useState(false)
   const [isChecked,setIsChecked] = useState(true)
   const [dataSearch,setDataSearch] = useState("")
   const [checkSort,setCheckSort] = useState(true)
@@ -33,7 +33,7 @@ const Producer = () => {
         setListInfoProducer(response.data.docs)
       })
       .catch(function (error) {});
-  }, [handelcheck]); 
+  }, [handelCheck]); 
  
   
 
@@ -101,7 +101,7 @@ const Producer = () => {
                                           producer_phone: "",
                                           producer_email: ""
                                           })
-                                          setHandleCheck(!handelcheck)
+                                          setHandleCheck(!handelCheck)
                                     })
                                     .catch(function (error) {});
 
@@ -151,7 +151,7 @@ const Producer = () => {
                                                         producer_phone: "",
                                                         producer_email: ""
                                                         })
-                                              setHandleCheck(!handelcheck)
+                                              setHandleCheck(!handelCheck)
                                               setIsChecked(!isChecked)
                                             })
                                             .catch(err => console.log(err))
@@ -186,7 +186,7 @@ const Producer = () => {
   setCheckSort(!checkSort)
 
   let comparison = 0 ;
-  let result = true
+ 
   if ( producer_nameA > producer_nameB ) {
     comparison = 1 ;
   } else if (producer_nameA <producer_nameB ) {
@@ -294,12 +294,18 @@ const handleSort = () => {
         <ModalCreateProducer
           show={showModalCreateProducer}
           setShow={setShowModalCreateProducer}
+
           infoProducer = {infoProducer}
+          setInfoProducer = {setInfoProducer}
+
+          isChecked = {isChecked}
+          setIsChecked = {setIsChecked}
+         
           onChangeInfoProducer = {onChangeInfoProducer}
           handleCreate = {handleCreate}
-          isChecked = {isChecked}
           handleUpdate = {handleUpdate}
-          handelcheck = {handelcheck}
+
+          handelCheck = {handelCheck}
           setHandleCheck = {setHandleCheck}
         />
       
@@ -307,12 +313,13 @@ const handleSort = () => {
         <ModalUpdateProducer
           show={showModalUpdateProducer}
           setShow={setShowModalUpdateProducer}
-         
+          setIsChecked = {setIsChecked}
+          isChecked = {isChecked}
           setInfoProducer = {setInfoProducer}
           infoProducer = {infoProducer}
           index = {getKey.current}
           setHandleCheck = {setHandleCheck}
-          handelcheck = {handelcheck}
+          handelCheck = {handelCheck}
         />
       
     </div>

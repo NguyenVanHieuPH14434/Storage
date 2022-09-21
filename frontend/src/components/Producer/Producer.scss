@@ -75,14 +75,14 @@
 
         li {
             list-style-type: none;
-            border: 0.0625em solid black;
-            padding: 0 0.5%;
-            margin-right: 0.5%;
+            // border: 0.0625em solid black;
+            // padding: 0 0.5%;
+            // margin-right: 0.5%;
      
         }
 
         :last-child {
-            margin: 0 0.5%;
+            // margin: 0 0.5%;
             text-decoration: none;
             color: blue;
             border-color: blue; 
@@ -95,14 +95,28 @@
             color: #000;
             border-color: blue; 
         }
-        .paginationActive{
-            background-color: #CCC;
+        .paginationActive a{
+            background-color: blue;
             color: white;
         }
     }
 
-    // .pageNumberOnClick{
-    //     color: white;
-    //     background-color: #198754;
-    // }
+     .pagination {
+    position: absolute;
+    bottom: 30px;
+    right: 20px;}
+     .paginationBtns a {
+      padding: 10px;
+      margin: 3px;
+      border-radius: 5px;
+      border: 1px solid #000;
+      color: #000;
+      cursor: pointer;
+    }
+    .nextBtn , .previousBtn {
+        text-decoration-color: white;
+        background-color: #198754;
+    }
+
+    
 }
