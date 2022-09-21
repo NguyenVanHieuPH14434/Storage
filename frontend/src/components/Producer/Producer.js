@@ -18,6 +18,7 @@ const Producer = () => {
   const [handelcheck, setHandleCheck] = useState(false)
   const [isChecked,setIsChecked] = useState(true)
   const [dataSearch,setDataSearch] = useState("")
+  const [checkSort,setCheckSort] = useState(true)
   let getKey = useRef()
   
  
@@ -182,14 +183,21 @@ const Producer = () => {
   // Dùng toUpperCase() để không phân biệt ký tự hoa thường
   const producer_nameA = a.producer_name.toUpperCase ( ) ;
   const producer_nameB = b.producer_name.toUpperCase ( ) ;
- 
+  setCheckSort(!checkSort)
+
   let comparison = 0 ;
+  let result = true
   if ( producer_nameA > producer_nameB ) {
     comparison = 1 ;
   } else if (producer_nameA <producer_nameB ) {
     comparison = - 1 ;
   }
-  return comparison ;
+  if(checkSort == true){
+
+    return comparison ;
+  } else {
+    return comparison * -1
+  }
 }
  
 
@@ -228,7 +236,7 @@ const handleSort = () => {
             variant="success"
             onClick={() => handleSort()}
           >
-            Sắp xếp
+          Sắp xếp ⬆⬇
           </Button>
         </Form.Group>
       </Form>
