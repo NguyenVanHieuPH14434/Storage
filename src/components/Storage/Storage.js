@@ -35,7 +35,6 @@ function Storage() {
         nsx: '',
         hsd: '',
     });
-    // phan trang
     const [currentItems, setCurrentItems] = useState(medicine);
     useEffect(() => {
         console.log('1');
@@ -314,27 +313,29 @@ function Storage() {
                 </Tab>
             </Tabs>
             {searchIn}
-            <ReactPaginate
-                nextLabel="next >"
-                onPageChange={changePage}
-                pageRangeDisplayed={3}
-                marginPagesDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="< previous"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakLabel="..."
-                breakClassName="page-item"
-                breakLinkClassName="page-link"
-                containerClassName="pagination"
-                activeClassName="active"
-                renderOnZeroPageCount={null}
-                // forcePage={currentPage - 1}
-            />
+            <div className='d-flex justify-content-center'>
+                <ReactPaginate
+                    nextLabel="next >"
+                    onPageChange={changePage}
+                    pageRangeDisplayed={3}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    renderOnZeroPageCount={null}
+                    // forcePage={currentPage - 1}
+                />
+            </div>
             {
                 <ModalCreateStorage
                     checked={checked}
