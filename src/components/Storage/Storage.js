@@ -5,6 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
+import { FaSearch } from 'react-icons/fa';
 import './Storage.scss';
 import ReactPaginate from 'react-paginate';
 import ModalCreateStorage from './ModalCreateStorage';
@@ -36,7 +37,6 @@ function Storage() {
     });
     // phan trang
     const [currentItems, setCurrentItems] = useState(medicine);
-
     useEffect(() => {
         console.log('1');
         Axios.get('http://localhost:4000/api/storage/list')
@@ -47,7 +47,6 @@ function Storage() {
                 console.log('error');
             });
     }, [handleCheck]);
-
     const [pageNumber, setPageNumber] = useState(0);
     const usersPerPage = 10;
     const pagesVisited = pageNumber * usersPerPage;
@@ -102,10 +101,10 @@ function Storage() {
 
     const handleSort = () => {
         if(sortName===false){
-            medicine.sort(deCrea)
+            medicine.sort(inCrea)
         }
         if(sortName===true){
-            medicine.sort(inCrea)
+            medicine.sort(deCrea)
         }
         setSortName(!sortName)
         setCurrentItems(medicine);
@@ -210,10 +209,13 @@ function Storage() {
                 <Tab eventKey="first" title="Thuốc">
                     <Form>
                         <Form.Group className="mb-3 fcontainer" controlId="exampleForm.ControlInput1">
-                            <Form.Label className="ftext">Tìm Kiếm Lô</Form.Label>
+                            <Form.Label className="ftext">
+                            <FaSearch className="fs-6 text-success" /> &nbsp;
+                            <b className="text-success">Tìm Kiếm Lô</b>
+                            </Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Nhập tên lô"
+                                placeholder="Search Something..."
                                 className="fip"
                                 onChange={(e) => setSearch(e.target.value)}
                             />
