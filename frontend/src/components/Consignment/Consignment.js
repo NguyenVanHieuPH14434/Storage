@@ -21,8 +21,9 @@ import _, { result, reverse, toLower } from 'lodash';
 const Consignment = () => {
     const [listConsignments, setListConsignments] = useState([]);
     const [listProducer, setListProducer] = useState([]);
-    const [sortt, setSortt] = useState([]);
-    const [reserve, setReserve] = useState([]);
+
+    const [listData, setListData] = useState([listConsignments]);
+    const [checkSort, setCheckSort] = useState(true);
 
     const [showModalCreateConsignment, setShowModalCreateConsignment] = useState(false);
 
@@ -60,9 +61,11 @@ const Consignment = () => {
 
     const fetchListConsignmentsWithPaginate = async (page) => {
         let response = await getConsignmentWithPaginate(page);
+
         if (response) {
             // console.log(response.data);
             setListConsignments(response.data.docs);
+
             setPageCount(response.data.totalPage);
         }
     };
@@ -80,9 +83,6 @@ const Consignment = () => {
             fetchListProducer();
         }
 
-        setListConsignments(sortt);
-        setListConsignments(reserve);
-
         // setListConsignments(listConsignments.filter((item) => item._id.toLowerCase().includes(search.toLowerCase())));
     }, [search]);
 
@@ -92,35 +92,30 @@ const Consignment = () => {
         // console.log(`User requested page number ${event.selected}`);
     };
 
+    function compare(a, b) {
+        // Dùng toUpperCase() để không phân biệt ký tự hoa thường
+        const product_nameA = a.product_name.toUpperCase();
+        const product_nameB = b.product_name.toUpperCase();
+        setCheckSort(!checkSort);
+
+        let comparison = 0;
+
+        if (product_nameA > product_nameB) {
+            comparison = 1;
+        } else if (product_nameA < product_nameB) {
+            comparison = -1;
+        }
+        if (checkSort == true) {
+            return comparison;
+        } else {
+            return comparison * -1;
+        }
+    }
+
     const handleSort = () => {
-        const data = listConsignments.sort((a, b) => {
-            let res = 0;
-            if (a.product_name.toLowerCase() > b.product_name.toLowerCase()) {
-                res = 1;
-            } else {
-                res = -1;
-            }
+        listConsignments.sort(compare);
 
-            return res;
-        });
-
-        setSortt(data);
-        console.log(data);
-    };
-    const handleReserve = () => {
-        const data = listConsignments.sort((a, b) => {
-            let res = 0;
-            if (a.product_name.toLowerCase() < b.product_name.toLowerCase()) {
-                res = 1;
-            } else {
-                res = -1;
-            }
-
-            return res;
-        });
-
-        setReserve(data);
-        console.log(data);
+        setListData(listConsignments);
     };
 
     return (
@@ -151,11 +146,11 @@ const Consignment = () => {
                     <tr>
                         <th className="text-center">STT</th>
                         <th className="text-center">ID</th>
-                        <th className="text-center">
-                            <span>Hàng Hóa</span>
+                        <th className="text-center" onClick={() => handleSort()}>
+                            <span>Hàng Hóa</span> &nbsp;
                             <span>
-                                <i className="fa-solid fa-arrow-down-long" onClick={() => handleSort()}></i>
-                                <i className="fa-solid fa-arrow-up-long" onClick={() => handleReserve()}></i>
+                                <i className="fa-solid fa-arrow-down-long"></i>
+                                <i className="fa-solid fa-arrow-up-long"></i>
                             </span>
                         </th>
                         <th className="text-center">Số Lô</th>
