@@ -6,16 +6,23 @@ import { Row, Col } from "react-bootstrap";
 import "./Producer.scss";
 import axios from "axios";
 const ModalCreateProducer = (props) => {
-  const { show, setShow, infoProducer, onChangeInfoProducer,handleCreate, 
+  const { show, setShow, infoProducer, onChangeInfoProducer,handleCreate,setInfoProducer, 
     handleUpdate,
-    handleCheck,
-    setHandleCheck,
-    isChecked}
+   
+    isChecked,
+    setIsChecked,
+  }
    = props;
   const handleClose = () => {
-    
-    setShow(false);
-   window.location.reload()
+  setShow(false);
+  setIsChecked(true);
+  setInfoProducer({
+      _id: "",
+        producer_name: "",
+        producer_address: "",
+        producer_phone: "",
+        producer_email: ""
+        })
   };
  
   return (
