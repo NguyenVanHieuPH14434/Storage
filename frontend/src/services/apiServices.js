@@ -11,7 +11,9 @@ const getAllConsigment = () => {
 const getAllProducer = () => {
     return axios.get('http://localhost:4000/api/producer/list');
 };
-
+const createConsignment = (data) => {
+    return axios.post('http://localhost:4000/api/consignment/create', data);
+};
 const updateConsignment = (id, data) => {
     return axios.post(`http://localhost:4000/api/consignment/update/${id}`, data);
 };
@@ -31,4 +33,5 @@ export {
     updateConsignment,
     getConsignmentWithPaginate,
     searchConsigment,
+    createConsignment,
 };
