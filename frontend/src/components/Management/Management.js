@@ -119,7 +119,7 @@ const Management = () => {
             .sort((a, b) => count % 2 !== 0 ? Number(b.shelf_name.slice(2)) - (Number(a.shelf_name.slice(2))) : Number(a.shelf_name.slice(2)) - (Number(b.shelf_name.slice(2))))
             .filter((element) => {
               if (element.shelf_name.includes(search)) {
-                return element;
+               return element;
               }
             })
             .map((element, index) => {
