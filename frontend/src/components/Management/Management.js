@@ -84,11 +84,11 @@ const Management = () => {
         <tbody>
           {shelf
           .slice(pagesVisited, pagesVisited + userPerPage)
-          .filter((element) => {
-            if(element.shelf_name.includes(search)) {
-              return element;
-            }
-          })
+          // .filter((element) => {
+          //   if(element.shelf_name.includes(search)) {
+          //     return element;
+          //   }
+          // })
           .map((element, index) => {
             return (
               <tr key={index}>
