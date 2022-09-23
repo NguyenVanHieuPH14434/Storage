@@ -13,15 +13,6 @@ const ModalCreateManagement = (props) => {
     setShow(false);
   };
 
-  // Toast message
-  const showToastMessageSucess = () => {
-    toast.success('Thêm Mới Kệ Thành Công');
-  };
-
-  const showToastMessageWarning = () => {
-    toast.warning('Thông Tin Không Được Để Trống');
-  }
-
   // Add
   const [nameAdd, setNameAdd] = useState("");
   const [descAdd, setDescAdd] = useState("");
@@ -40,7 +31,7 @@ const ModalCreateManagement = (props) => {
       });
     }
     else {
-      showToastMessageWarning();
+      toast.warning("Thông Tin Không Được Để Trống");
     }
 
   }

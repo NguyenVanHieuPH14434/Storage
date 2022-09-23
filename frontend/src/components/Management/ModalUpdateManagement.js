@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
 import "./Management.scss";
 
 const ModalUpdateManagement = (props) => {
