@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import './Consignment.scss';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalCreateConsignment from './ModalCreateConsignment';
 import ModalUpdateConsignment from './ModalUpdateConsignment';
@@ -17,6 +17,9 @@ import {
 } from '../../services/apiServices';
 import ReactPaginate from 'react-paginate';
 import _, { result, reverse, toLower } from 'lodash';
+import Moment from 'moment';
+import ModalImportConsignment from './ModalImportConsignment';
+import axios from 'axios';
 
 const Consignment = () => {
     const [listConsignments, setListConsignments] = useState([]);
@@ -26,6 +29,7 @@ const Consignment = () => {
     const [checkSort, setCheckSort] = useState(true);
 
     const [showModalCreateConsignment, setShowModalCreateConsignment] = useState(false);
+    const [showModalImportConsignment, setShowModalImportConsignment] = useState(false);
 
     const [showModalUpdateConsignment, setShowModalUpdateConsignment] = useState(false);
     const [dataUpdate, setDataUpdate] = useState({});
@@ -37,6 +41,8 @@ const Consignment = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const [search, setSearch] = useState('');
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
 
     const handleShowCreateConsignment = () => {
         setShowModalCreateConsignment(true);
@@ -118,6 +124,23 @@ const Consignment = () => {
         setListData(listConsignments);
     };
 
+    const handleShowImportConsignment = () => {
+        setShowModalImportConsignment(true);
+    };
+
+    const handleExport = () => {
+        const newFromDate = Moment(fromDate).format('DD/MM/YYYY');
+        const newToDate = Moment(toDate).format('DD/MM/YYYY');
+        if (fromDate && toDate) {
+            window.location.href = `http://localhost:4000/api/consignment/export?fromDate=${newFromDate}&toDate=${newToDate}`;
+        } else if (fromDate && !toDate) {
+            window.location.href = `http://localhost:4000/api/consignment/export?fromDate=${newFromDate}`;
+        } else if (!fromDate && !toDate) {
+            window.location.href = `http://localhost:4000/api/consignment/export`;
+        }
+        toast.success('Ok');
+    };
+
     return (
         <div className="consignment">
             <br />
@@ -138,6 +161,20 @@ const Consignment = () => {
                     />
                     <Button variant="success" onClick={handleShowCreateConsignment}>
                         THÊM MỚI
+                    </Button>
+                </Form.Group>
+            </Form>
+            <Form>
+                <Form.Group className="mb-3 fcontainer" controlId="exampleForm.ControlInput1">
+                    <Form.Control type="date" name="fromDate" onChange={(e) => setFromDate(e.target.value)} /> &nbsp;
+                    &nbsp; &nbsp;
+                    <Form.Control type="date" name="toDate" onChange={(e) => setToDate(e.target.value)} />
+                    &nbsp; &nbsp; &nbsp;
+                    <Button variant="success" onClick={handleExport} style={{ marginRight: '8px' }}>
+                        Export
+                    </Button>
+                    <Button variant="success" onClick={handleShowImportConsignment}>
+                        Import
                     </Button>
                 </Form.Group>
             </Form>
@@ -166,6 +203,7 @@ const Consignment = () => {
                             .filter(
                                 (item) =>
                                     item._id.toLowerCase().includes(search) ||
+                                    item.producer_name.toLowerCase().includes(search) ||
                                     item.ctime.toLowerCase().includes(search),
                             )
                             .map((item, index) => {
@@ -234,6 +272,17 @@ const Consignment = () => {
                 <ModalCreateConsignment
                     show={showModalCreateConsignment}
                     setShow={setShowModalCreateConsignment}
+                    listProducer={listProducer}
+                    fetchListConsignments={fetchListConsignments}
+                    fetchListConsignmentsWithPaginate={fetchListConsignmentsWithPaginate}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                />
+            }
+            {
+                <ModalImportConsignment
+                    show={showModalImportConsignment}
+                    setShow={setShowModalImportConsignment}
                     listProducer={listProducer}
                     fetchListConsignments={fetchListConsignments}
                     fetchListConsignmentsWithPaginate={fetchListConsignmentsWithPaginate}

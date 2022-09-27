@@ -110,14 +110,13 @@ const Management = () => {
                 </thead>
                 <tbody>
                     {shelf
-                        .slice(pagesVisited, pagesVisited + userPerPage)
                         .sort((a, b) =>
                             count % 2 !== 0
                                 ? Number(b.shelf_name.slice(2)) - Number(a.shelf_name.slice(2))
                                 : Number(a.shelf_name.slice(2)) - Number(b.shelf_name.slice(2)),
                         )
                         .filter((element) => {
-                            if (element.shelf_name.includes(search)) {
+                            if (element.shelf_name.toLowerCase().includes(search)) {
                                 return element;
                             }
                         })
@@ -142,7 +141,8 @@ const Management = () => {
                                     </td>
                                 </tr>
                             );
-                        })}
+                        })
+                        .slice(pagesVisited, pagesVisited + userPerPage)}
                 </tbody>
                 {<ModalCreateManagement show={showModalCreateManagement} setShow={setShowModalCreateManagement} />}
                 {
